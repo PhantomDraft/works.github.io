@@ -8,7 +8,6 @@ html, body {
   padding: 0;
   width: 100vw;
   min-height: 100vh;
-  background-color: #000;
   overflow-x: hidden;
 }
 
@@ -16,10 +15,9 @@ html, body {
   position: relative;
   width: 100%;
   height: 100vh;
-  overflow: visible;
 }
 
-/* слой неба */
+/* фон неба */
 .layer.sky {
   position: absolute;
   top: 0;
@@ -31,35 +29,6 @@ html, body {
   z-index: 0;
 }
 
-/* экран и рамка */
-.screen-wrapper {
-  position: absolute;
-  top: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: var(--window-width);
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  z-index: 2;
-}
-
-.screen-wrapper .layer.frame {
-  position: absolute;
-  inset: 0;
-  background: url('../assets/frame.png') center / contain no-repeat;
-  z-index: 3;
-  pointer-events: none;
-}
-
-/* белый фон экрана */
-.screen-wrapper .project-container {
-  position: absolute;
-  inset: 0;
-  background-color: #fff;
-  overflow: hidden;
-  z-index: 1;
-}
-
 /* подставка */
 .layer.stand {
   position: absolute;
@@ -68,7 +37,7 @@ html, body {
   transform: translateX(-50%);
   width: var(--window-width);
   background: url('../assets/stand.png') center / contain no-repeat;
-  z-index: 2;
+  z-index: 1;
 }
 
 /* корпус ноутбука */
@@ -80,6 +49,19 @@ html, body {
   width: var(--window-width);
   background: url('../assets/laptop.png') center / contain no-repeat;
   z-index: 2;
+}
+
+/* экран ноутбука внутри корпуса */
+.layer.laptop .project-container {
+  position: absolute;
+  /* смещение и размер белой области экрана */
+  top: 12%;
+  left: 4%;
+  width: 92%;
+  height: 54%;
+  overflow: hidden;
+  background-color: transparent;
+  z-index: 3;
 }
 
 /* превью внутри контента */
@@ -109,13 +91,4 @@ html, body {
   padding: 10px;
   border-radius: 5px;
   z-index: 4;
-}
-
-/* режимы луны */
-#scene.horror .layer.moon {
-  opacity: 1;
-  background-image: url('../assets/moon-horror.png');
-}
-#scene.scandi.horror .layer.moon {
-  background-image: url('../assets/moon-scandi.png');
 }
