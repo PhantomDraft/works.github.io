@@ -2,18 +2,20 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ноутбук с маской экрана</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ноутбук с врезанным экраном</title>
   <link rel="stylesheet" href="styles/hugr.css">
 </head>
 <body>
   <div class="laptop-container">
     <button id="prevBtn">Назад</button>
-    <div class="masked-screen">
+    <div class="screenshot-container">
       <img id="screenshot" src="" alt="Скриншот проекта">
     </div>
     <button id="nextBtn">Вперёд</button>
+    <img src="assets/laptop.png" alt="Ноутбук" class="laptop-border">
   </div>
+
   <script defer src="scripts/portfolioApp.js"></script>
 </body>
 </html>
