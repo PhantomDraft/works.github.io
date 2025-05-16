@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Horror Site",
+    "thumbnail": "assets/cover.png",
+    "description": "Dark and chilling",
+    "url": "https://example.com/horror",
+    "category": "horror"
+  },
+  {
+    "title": "Scandinavian Blog",
+    "thumbnail": "assets/thumb2.jpg",
+    "description": "Clean and minimal",
+    "url": "https://example.com/scandi",
+    "category": "scandinavian"
+  }
+]

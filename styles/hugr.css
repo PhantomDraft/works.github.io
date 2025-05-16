@@ -1,0 +1,126 @@
+/* Обёртка всего приложения */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+/* боковые панели */
+#app::before,
+#app::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: calc((100vw - var(--window-width)) / 2);
+  background: black;
+  z-index: 1;
+}
+#app::before { left: 0; }
+#app::after  { right: 0; }
+/* подложка неба */
+#sky {
+  position: absolute;
+  top: 0; left: 50%;
+  width: auto;
+  height: 100%;
+  transform: translateX(-50%);
+  object-fit: cover;
+  z-index: 0;
+}
+/* рамка и ноутбук поверх */
+#frame, #stand, #laptop {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  z-index: 2;
+}
+/* переместить ноутбук чуть ниже */
+#laptop {
+  top: calc(50% + 5vh);
+}
+/* переменная ширина «окна» */
+:root {
+  --window-width: 60vw; /* подберите под ваш контент */
+}
+
+#sky, #sky-night {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;       /* растянуто по высоте контейнера */
+  width: auto;
+  object-fit: cover;
+  z-index: 0;
+}
+
+#moon {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 25vh;
+  height: auto;
+  opacity: 0;
+  transition: opacity 1s;
+  z-index: 1;
+}
+
+#frame, #stand, #laptop {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 90%;         /* сохраняем пропорции и масштаб */
+  width: auto;
+  z-index: 2;
+}
+
+#frame { top: 5%; }
+#stand { bottom: 12%; }
+#laptop { bottom: 8%; }  /* опускаем ноутбук чуть ниже */
+
+.project-container {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 60%;
+  height: auto;
+  z-index: 3;
+}
+.project-container a img {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.project-container a img:hover { transform: scale(1.05); }
+
+#modeBtn {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  z-index: 4;
+}
+#modeMenu {
+  position: absolute;
+  top: 12%;
+  right: 5%;
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 4;
+}

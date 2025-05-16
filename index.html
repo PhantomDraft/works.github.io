@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Portfolio</title>
+  <link rel="stylesheet" href="styles/hugr.css">
+</head>
+<body>
+  <!-- Слои приложения -->
+  <img id="sky" src="assets/sky-day.png" alt="Sky background">
+  <img id="moon" src="assets/moon-default.png" alt="Moon" hidden>
+  <img id="frame" src="assets/frame.png" alt="Window frame">
+  <img id="stand" src="assets/stand.png" alt="Stand">
+  <img id="laptop" src="assets/laptop.png" alt="Laptop">
+
+  <!-- Контент проектов -->
+  <div id="content" class="project-container"></div>
+
+  <!-- Меню режимов -->
+  <button id="modeBtn" aria-label="Toggle modes">☰</button>
+  <div id="modeMenu" hidden>
+    <label><input type="checkbox" id="mode-horror"> Horror</label>
+    <label><input type="checkbox" id="mode-scandi"> Scandinavic</label>
+  </div>
+
+  <script defer src="scripts/portfolioApp.js"></script>
+</body>
+</html>
