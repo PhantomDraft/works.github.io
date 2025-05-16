@@ -1,90 +1,90 @@
+/* hugr.css */
 :root {
   --window-width: 60vw;
 }
 
-/* Сброс и базовая разметка */
 html, body {
   margin: 0;
   padding: 0;
   width: 100vw;
   min-height: 100vh;
-  height: auto;
-  overflow-y: auto;
   background-color: #000;
-  display: block;
+  overflow-x: hidden;
 }
 
 #scene {
   position: relative;
-  width: 100vw;
-  min-height: 100vh;
-  height: auto;
+  width: 100%;
+  height: 100vh;
   overflow: visible;
 }
 
-/* Общие стили слоёв */
-.layer {
+/* слой неба */
+.layer.sky {
   position: absolute;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-/* Слой «небо» */
-.layer.sky {
-  top: 0;
   width: 100vw;
   height: 100%;
-  background-image: url('../assets/sky-day.png');
-  background-size: cover;
+  background: url('../assets/sky-day.png') center / cover no-repeat;
   z-index: 0;
 }
 
-/* Контейнер проектов (белый фон) */
-.project-container {
+/* экран и рамка */
+.screen-wrapper {
   position: absolute;
-  top: 30%;
+  top: 5%;
   left: 50%;
   transform: translateX(-50%);
   width: var(--window-width);
-  aspect-ratio: 16/9;
-  background-color: #fff;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   z-index: 2;
 }
 
-/* Рамка окна */
-.layer.frame {
-  top: 5%;
-  width: var(--window-width);
-  background-image: url('../assets/frame.png');
-  background-size: contain;
+.screen-wrapper .layer.frame {
+  position: absolute;
+  inset: 0;
+  background: url('../assets/frame.png') center / contain no-repeat;
   z-index: 3;
+  pointer-events: none;
 }
 
-/* Подставка */
+/* белый фон экрана */
+.screen-wrapper .project-container {
+  position: absolute;
+  inset: 0;
+  background-color: #fff;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* подставка */
 .layer.stand {
+  position: absolute;
   bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
   width: var(--window-width);
-  background-image: url('../assets/stand.png');
-  background-size: contain;
+  background: url('../assets/stand.png') center / contain no-repeat;
   z-index: 2;
 }
 
-/* Корпус ноутбука */
+/* корпус ноутбука */
 .layer.laptop {
+  position: absolute;
   bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
   width: var(--window-width);
-  background-image: url('../assets/laptop.png');
-  background-size: contain;
+  background: url('../assets/laptop.png') center / contain no-repeat;
   z-index: 2;
 }
 
-/* Превью внутри контента */
+/* превью внутри контента */
 .project-container a img {
   width: 100%;
-  height: auto;
   display: block;
   cursor: pointer;
   transition: transform 0.3s;
@@ -93,7 +93,7 @@ html, body {
   transform: scale(1.05);
 }
 
-/* Кнопка и меню режимов */
+/* кнопка и меню режимов */
 #modeBtn {
   position: absolute;
   top: 5%;
@@ -111,7 +111,7 @@ html, body {
   z-index: 4;
 }
 
-/* Переключение луны через классы на #scene */
+/* режимы луны */
 #scene.horror .layer.moon {
   opacity: 1;
   background-image: url('../assets/moon-horror.png');
