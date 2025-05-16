@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ноутбук с маской экрана</title>
+  <title>Ноутбук с адаптивным экраном</title>
   <link rel="stylesheet" href="styles/hugr.css">
 </head>
 <body>
-  <div class="screen-container">
-    <div class="masked-screen" id="maskedScreen"></div>
-    <button id="prevBtn" class="nav-btn">Назад</button>
-    <button id="nextBtn" class="nav-btn">Вперёд</button>
+  <div class="laptop-wrapper">
+    <button id="prevBtn" class="nav-btn">←</button>
+    <a id="screen" class="screen" href="#" target="_blank" rel="noopener noreferrer"></a>
+    <button id="nextBtn" class="nav-btn">→</button>
   </div>
 
   <script defer src="scripts/portfolioApp.js"></script>

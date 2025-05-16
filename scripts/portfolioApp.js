@@ -2,14 +2,15 @@
 let projects = [];
 let currentIndex = 0;
 
-const maskedScreen = document.getElementById('maskedScreen');
+const screenEl = document.getElementById('screen');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 
 function updateScreen() {
   if (!projects.length) return;
-  const thumb = projects[currentIndex].thumbnail;
-  maskedScreen.style.backgroundImage = `url('${thumb}')`;
+  const { thumbnail, link } = projects[currentIndex];
+  screenEl.style.backgroundImage = `url('${thumbnail}')`;
+  screenEl.href = link || '#';
 }
 
 fetch('data/projects.json')
@@ -18,7 +19,7 @@ fetch('data/projects.json')
     projects = Array.isArray(data) ? data : data.projects;
     updateScreen();
   })
-  .catch(err => console.error('Не удалось загрузить проекты:', err));
+  .catch(err => console.error('Ошибка загрузки JSON:', err));
 
 prevBtn.addEventListener('click', () => {
   if (!projects.length) return;
