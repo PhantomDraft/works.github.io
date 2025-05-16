@@ -1,94 +1,52 @@
-/* hugr.css */
-:root {
-  --window-width: 60vw;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-#scene {
+/* styles/hugr.css */
+.laptop-container {
   position: relative;
-  width: 100%;
-  height: 100vh;
+  width: 60vw;
+  max-width: 800px;
+  margin: auto;
 }
 
-/* фон неба */
-.layer.sky {
+.masked-screen {
+  width: 100%;
+  aspect-ratio: 16/9;
+  position: relative;
+
+  /* Маска по яркости: белая область экрана пропускает, чёрная — скрывает */
+  mask-image: url('../assets/laptop.png');
+  mask-mode: luminance;
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  
+  /* WebKit префиксы */
+  -webkit-mask-image: url('../assets/laptop.png');
+  -webkit-mask-mode: luminance;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+
+  background-color: #000; /* фон за маской */
+}
+
+.masked-screen img {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100vw;
+  left: 0;
+  width: 100%;
   height: 100%;
-  background: url('../assets/sky-day.png') center / cover no-repeat;
-  z-index: 0;
+  object-fit: cover;
 }
 
-/* подставка */
-.layer.stand {
+#prevBtn, #nextBtn {
   position: absolute;
-  bottom: 12%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: var(--window-width);
-  background: url('../assets/stand.png') center / contain no-repeat;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
   z-index: 1;
 }
-
-/* корпус ноутбука */
-.layer.laptop {
-  position: absolute;
-  bottom: 8%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: var(--window-width);
-  background: url('../assets/laptop.png') center / contain no-repeat;
-  z-index: 2;
-}
-
-/* экран ноутбука внутри корпуса */
-.layer.laptop .project-container {
-  position: absolute;
-  /* смещение и размер белой области экрана */
-  top: 12%;
-  left: 4%;
-  width: 92%;
-  height: 54%;
-  overflow: hidden;
-  background-color: transparent;
-  z-index: 3;
-}
-
-/* превью внутри контента */
-.project-container a img {
-  width: 100%;
-  display: block;
-  cursor: pointer;
-  transition: transform 0.3s;
-}
-.project-container a img:hover {
-  transform: scale(1.05);
-}
-
-/* кнопка и меню режимов */
-#modeBtn {
-  position: absolute;
-  top: 5%;
-  right: 5%;
-  z-index: 4;
-}
-#modeMenu {
-  position: absolute;
-  top: 12%;
-  right: 5%;
-  background: rgba(0,0,0,0.8);
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  z-index: 4;
-}
+#prevBtn { left: 10px; }
+#nextBtn { right: 10px; }

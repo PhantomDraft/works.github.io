@@ -1,33 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ноутбук с маской экрана</title>
   <link rel="stylesheet" href="styles/hugr.css">
 </head>
 <body>
-  <div id="scene">
-    <!-- фон неба -->
-    <div class="layer sky"></div>
-
-    <!-- подставка под ноутбук -->
-    <div class="layer stand"></div>
-
-    <!-- корпус ноутбука и встроенный экран -->
-    <div class="layer laptop">
-      <!-- контейнер для скриншотов и контента -->
-      <div id="content" class="project-container"></div>
+  <div class="laptop-container">
+    <button id="prevBtn">Назад</button>
+    <div class="masked-screen">
+      <img id="screenshot" src="" alt="Скриншот проекта">
     </div>
-
-    <!-- меню режимов -->
-    <button id="modeBtn" aria-label="Toggle modes">☰</button>
-    <div id="modeMenu" hidden>
-      <label><input type="checkbox" id="mode-horror"> Horror</label>
-      <label><input type="checkbox" id="mode-scandi"> Scandinavic</label>
-    </div>
+    <button id="nextBtn">Вперёд</button>
   </div>
-
   <script defer src="scripts/portfolioApp.js"></script>
 </body>
 </html>
