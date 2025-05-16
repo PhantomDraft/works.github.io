@@ -1,41 +1,49 @@
 /* styles/hugr.css */
-.laptop-container {
+:root {
+  --container-width: 60vw;
+  --container-max: 800px;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.screen-container {
   position: relative;
-  width: 60vw;
-  max-width: 800px;
-  margin: 40px auto;
+  width: var(--container-width);
+  max-width: var(--container-max);
+  height: var(--container-width);
+  max-height: var(--container-max);
+  margin: 50px auto;
 }
 
-/* Контейнер для скриншота, размещается внутри белого экрана */
-.screenshot-container {
-  position: absolute;
-  top: 11%;     /* смещение сверху внутри контейнера */
-  left: 13%;    /* смещение слева внутри контейнера */
-  width: 74%;   /* ширина равна ширине экрана ноутбука */
-  height: 34%;  /* высота экрана ноутбука */
-  overflow: hidden;
-  z-index: 1;
-}
-
-.screenshot-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Граница ноутбука поверх скриншота */
-.laptop-border {
+.masked-screen {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: auto;
-  z-index: 2;
-  pointer-events: none;
+  height: 100%;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Маска по альфа-каналу */
+  mask-image: url('../assets/laptop.png');
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-mode: alpha;
+
+  /* WebKit-префиксы */
+  -webkit-mask-image: url('../assets/laptop.png');
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-mode: alpha;
 }
 
-/* Навигационные кнопки */
-#prevBtn, #nextBtn {
+.nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -44,7 +52,7 @@
   border: none;
   padding: 8px 12px;
   cursor: pointer;
-  z-index: 3;
+  z-index: 1;
 }
-#prevBtn { left: 5%; }
-#nextBtn { right: 5%; }
+.nav-btn#prevBtn { left: 10px; }
+.nav-btn#nextBtn { right: 10px; }

@@ -1,32 +1,32 @@
-// scripts/portfolioApp.js
+/* scripts/portfolioApp.js */
 let projects = [];
 let currentIndex = 0;
-const screenshotEl = document.getElementById('screenshot');
+
+const maskedScreen = document.getElementById('maskedScreen');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 
-function showScreenshot() {
+function updateScreen() {
   if (!projects.length) return;
-  const project = projects[currentIndex];
-  screenshotEl.src = project.thumbnail;
+  const thumb = projects[currentIndex].thumbnail;
+  maskedScreen.style.backgroundImage = `url('${thumb}')`;
 }
 
-// Загружаем список проектов из JSON
 fetch('data/projects.json')
-  .then(response => response.json())
+  .then(res => res.json())
   .then(data => {
     projects = Array.isArray(data) ? data : data.projects;
-    showScreenshot();
+    updateScreen();
   })
-  .catch(err => console.error('Ошибка загрузки JSON:', err));
+  .catch(err => console.error('Не удалось загрузить проекты:', err));
 
 prevBtn.addEventListener('click', () => {
   if (!projects.length) return;
   currentIndex = (currentIndex - 1 + projects.length) % projects.length;
-  showScreenshot();
+  updateScreen();
 });
 nextBtn.addEventListener('click', () => {
   if (!projects.length) return;
   currentIndex = (currentIndex + 1) % projects.length;
-  showScreenshot();
+  updateScreen();
 });
