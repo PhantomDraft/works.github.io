@@ -1,86 +1,111 @@
-/* Обёртка всего приложения */
+:root {
+  --window-width: 60vw;    /* ширина области экрана */
+}
+
+/* Сброс и скролл */
 html, body {
   margin: 0;
   padding: 0;
   width: 100vw;
-  min-height: 100vh;       /* минимум — полный экран */
-  height: auto;            /* подстраивается под контент */
-  overflow-y: auto;        /* скроллим по необходимости */
+  min-height: 100vh;
+  height: auto;
+  overflow-y: auto;
   background-color: #000;
-  display: block;          /* убрали flex-центрирование */
+  display: block;
 }
 
-#app {
+/* Основной контейнер сцены */
+#scene {
   position: relative;
   width: 100vw;
-  min-height: 100vh;       /* минимум — полный экран */
-  height: auto;            /* подстраивается под контент */
-  overflow: visible;       /* контент может выходить за рамки */
+  min-height: 100vh;
+  height: auto;
+  overflow: visible;
 }
 
-/* боковые панели */
-#app::before,
-#app::after {
-  content: "";
+/* Общие стили для всех слоёв */
+.layer {
   position: absolute;
-  top: 0; bottom: 0;
-  width: calc((100vw - var(--window-width)) / 2);
-  background: black;
-  z-index: 1;
-}
-#app::before { left: 0; }
-#app::after  { right: 0; }
-
-/* подложка неба */
-#sky, #sky-night {
-  position: absolute;
-  top: 0; left: 50%;
+  left: 50%;
   transform: translateX(-50%);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Фон неба */
+.layer.sky {
+  top: 0;
   height: 100%;
-  width: auto;
-  object-fit: cover;
+  width: 100vw;
+  background-image: url('../assets/sky-day.png');
+  background-size: cover;
   z-index: 0;
 }
 
-#moon {
-  position: absolute;
+/* Луна */
+.layer.moon {
   top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
   width: 25vh;
-  height: auto;
+  height: 25vh;
+  background-image: url('../assets/moon-default.png');
+  background-size: contain;
   opacity: 0;
   transition: opacity 1s;
   z-index: 1;
 }
 
-#frame, #stand, #laptop {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+/* Рамка ноутбука */
+.layer.frame {
+  top: 5%;
+  width: var(--window-width);
+  background-image: url('../assets/frame.png');
+  background-size: contain;
   z-index: 2;
 }
-#frame { top: 5%; }
-#stand { bottom: 12%; }
-#laptop { bottom: 8%; }  /* опускаем ноутбук чуть ниже */
 
-/* переменная ширина «окна» */
-:root {
-  --window-width: 60vw; /* подберите под ваш контент */
+/* Подставка под ноутбук */
+.layer.stand {
+  bottom: 12%;
+  width: var(--window-width);
+  background-image: url('../assets/stand.png');
+  background-size: contain;
+  z-index: 2;
 }
 
+/* Ноутбук */
+.layer.laptop {
+  bottom: 8%;
+  width: var(--window-width);
+  background-image: url('../assets/laptop.png');
+  background-size: contain;
+  z-index: 2;
+}
+
+/* Область с проектами — маска по файлу PNG, внутри экрана */
 .project-container {
   position: absolute;
+  top: 30%;
   left: 50%;
-  top: 30%;               /* подстройте, чтобы совпадало с верхом экрана */
   transform: translateX(-50%);
   width: var(--window-width);
-  aspect-ratio: 16/9;     /* соотношение экрана ноутбука */
-  overflow: hidden;       /* обрезаем всё, что выходит за рамки */
-  clip-path: inset(8% 7% 15% 7%); /* отступы до границ экрана: top, right, bottom, left */
+  aspect-ratio: 16/9;
+  overflow: hidden;
   z-index: 3;
+
+  mask-image: url('../assets/laptop-screen-mask.png');
+  mask-mode: alpha;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+
+  -webkit-mask-image: url('../assets/laptop-screen-mask.png');
+  -webkit-mask-mode: alpha;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
 }
 
+/* Картинки внутри контента (превью проектов) */
 .project-container a img {
   width: 100%;
   height: auto;
@@ -92,6 +117,7 @@ html, body {
   transform: scale(1.05);
 }
 
+/* Кнопка и меню режимов */
 #modeBtn {
   position: absolute;
   top: 5%;
@@ -107,4 +133,13 @@ html, body {
   padding: 10px;
   border-radius: 5px;
   z-index: 4;
+}
+
+/* Переключение режимов через JS (классы на #scene) */
+#scene.horror .layer.moon {
+  opacity: 1;
+  background-image: url('../assets/moon-horror.png');
+}
+#scene.scandi.horror .layer.moon {
+  background-image: url('../assets/moon-scandi.png');
 }
