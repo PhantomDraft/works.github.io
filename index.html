@@ -8,17 +8,22 @@
 </head>
 <body>
   <div id="scene">
-    <!-- Декоративные слои -->
+    <!-- фон неба -->
     <div class="layer sky"></div>
-    <div class="layer moon"></div>
-    <div class="layer frame"></div>
-    <div class="layer stand"></div>
-    <div class="layer laptop"></div>
 
-    <!-- Контент проектов внутри экрана -->
+    <!-- контент проектов (под рамкой) -->
     <div id="content" class="project-container"></div>
 
-    <!-- Меню режимов -->
+    <!-- рамка окна ноутбука -->
+    <div class="layer frame"></div>
+
+    <!-- подставка под ноутбук -->
+    <div class="layer stand"></div>
+
+    <!-- сам ноутбук (только корпус) -->
+    <div class="layer laptop"></div>
+
+    <!-- меню режимов -->
     <button id="modeBtn" aria-label="Toggle modes">☰</button>
     <div id="modeMenu" hidden>
       <label><input type="checkbox" id="mode-horror"> Horror</label>

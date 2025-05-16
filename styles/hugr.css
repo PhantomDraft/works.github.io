@@ -1,8 +1,8 @@
 :root {
-  --window-width: 60vw;    /* ширина области экрана */
+  --window-width: 60vw;
 }
 
-/* Сброс и скролл */
+/* Сброс и базовая разметка */
 html, body {
   margin: 0;
   padding: 0;
@@ -14,7 +14,6 @@ html, body {
   display: block;
 }
 
-/* Основной контейнер сцены */
 #scene {
   position: relative;
   width: 100vw;
@@ -23,7 +22,7 @@ html, body {
   overflow: visible;
 }
 
-/* Общие стили для всех слоёв */
+/* Общие стили слоёв */
 .layer {
   position: absolute;
   left: 50%;
@@ -32,38 +31,39 @@ html, body {
   background-position: center;
 }
 
-/* Фон неба */
+/* Слой «небо» */
 .layer.sky {
   top: 0;
-  height: 100%;
   width: 100vw;
+  height: 100%;
   background-image: url('../assets/sky-day.png');
   background-size: cover;
   z-index: 0;
 }
 
-/* Луна */
-.layer.moon {
-  top: 10%;
-  width: 25vh;
-  height: 25vh;
-  background-image: url('../assets/moon-default.png');
-  background-size: contain;
-  opacity: 0;
-  transition: opacity 1s;
-  z-index: 1;
+/* Контейнер проектов (белый фон) */
+.project-container {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--window-width);
+  aspect-ratio: 16/9;
+  background-color: #fff;
+  overflow: hidden;
+  z-index: 2;
 }
 
-/* Рамка ноутбука */
+/* Рамка окна */
 .layer.frame {
   top: 5%;
   width: var(--window-width);
   background-image: url('../assets/frame.png');
   background-size: contain;
-  z-index: 2;
+  z-index: 3;
 }
 
-/* Подставка под ноутбук */
+/* Подставка */
 .layer.stand {
   bottom: 12%;
   width: var(--window-width);
@@ -72,7 +72,7 @@ html, body {
   z-index: 2;
 }
 
-/* Ноутбук */
+/* Корпус ноутбука */
 .layer.laptop {
   bottom: 8%;
   width: var(--window-width);
@@ -81,31 +81,7 @@ html, body {
   z-index: 2;
 }
 
-/* Область с проектами — маска по файлу PNG, внутри экрана */
-.project-container {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: var(--window-width);
-  aspect-ratio: 16/9;
-  overflow: hidden;
-  z-index: 3;
-
-  mask-image: url('../assets/laptop-screen-mask.png');
-  mask-mode: alpha;
-  mask-repeat: no-repeat;
-  mask-position: center;
-  mask-size: contain;
-
-  -webkit-mask-image: url('../assets/laptop-screen-mask.png');
-  -webkit-mask-mode: alpha;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  -webkit-mask-size: contain;
-}
-
-/* Картинки внутри контента (превью проектов) */
+/* Превью внутри контента */
 .project-container a img {
   width: 100%;
   height: auto;
@@ -135,7 +111,7 @@ html, body {
   z-index: 4;
 }
 
-/* Переключение режимов через JS (классы на #scene) */
+/* Переключение луны через классы на #scene */
 #scene.horror .layer.moon {
   opacity: 1;
   background-image: url('../assets/moon-horror.png');
