@@ -10,8 +10,8 @@
 
 <svg xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="1024" height="1024"
-     viewBox="0 0 1024 1024"
+     width="1024" height="1500"
+     viewBox="0 0 1024 1500"
      preserveAspectRatio="xMidYMid slice">
 
   <defs>
@@ -20,7 +20,7 @@
       <image
         href="assets/frame-mask.png"
         x="0" y="0"
-        width="1024" height="1024"
+        width="1024" height="1500"
         preserveAspectRatio="xMidYMid slice"/>
     </mask>
 
@@ -28,7 +28,7 @@
     <mask id="screenMask" maskUnits="userSpaceOnUse">
       <image
         href="assets/laptop_black_bg.png"
-        x="0" y="0"
+        x="0" y="300"
         width="1024" height="1024"/>
     </mask>
   </defs>
@@ -39,13 +39,13 @@
       id="sky"
       href="assets/sky-night.png"
       x="0" y="0"
-      width="1024" height="1024"
+      width="1024" height="1500"
       preserveAspectRatio="xMidYMid slice"/>
     <image
       id="moon"
       href="assets/moon-default.png"
       x="0" y="0"
-      width="1024" height="1024"
+      width="1024" height="1500"
       visibility="hidden"/>
   </g>
 
@@ -53,7 +53,7 @@
   <image
     href="assets/frame.png"
     x="0" y="0"
-    width="1024" height="1024"
+    width="1024" height="1500"
     preserveAspectRatio="xMidYMid slice"/>
 
   <!-- 3) Карусель внутри экрана ноутбука -->
@@ -61,7 +61,8 @@
     <a id="carouselLink" xlink:href="" target="_blank">
       <image
         id="carouselImage"
-        x="0" y="-110"
+        x="0" y="
+        190"
         width="1024" height="1024"
         mask="url(#screenMask)"
         style="cursor: pointer;"/>
@@ -71,7 +72,7 @@
   <!-- 4) Рамка ноутбука -->
   <image
     href="assets/laptop_transparent_screen.png"
-    x="0" y="0"
+    x="0" y="300"
     width="1024" height="1024"/>
 
   <!-- 5) Навигационные стрелки -->
