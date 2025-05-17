@@ -11,7 +11,7 @@ class Carousel {
   init() {
     if (!this.images.length) return;
     this.show();
-    this.leftEl.addEventListener('click', () => this.prev());
+    this.leftEl .addEventListener('click', () => this.prev());
     this.rightEl.addEventListener('click', () => this.next());
     window.addEventListener('keydown', ({ key }) => {
       if (key === 'ArrowLeft')  this.prev();
@@ -22,12 +22,9 @@ class Carousel {
 
   show() {
     const { thumbnail, url } = this.images[this.current];
-    this.imgEl.setAttribute('href', thumbnail);
-    this.linkEl.setAttributeNS(
-      'http://www.w3.org/1999/xlink',
-      'xlink:href',
-      url
-    );
+    // Вариант B: через .href.baseVal
+    this.imgEl .href.baseVal = thumbnail;
+    this.linkEl.href.baseVal = url;
   }
 
   next() {
@@ -51,21 +48,21 @@ class Carousel {
     this.imgEl.addEventListener('touchend', e => {
       if (startX === null) return;
       const diff = e.changedTouches[0].clientX - startX;
-      if (diff > threshold)       this.prev();
+      if      (diff >  threshold) this.prev();
       else if (diff < -threshold) this.next();
       startX = null;
     });
   }
 }
 
-// Загрузка массива из data/images.json и инициализация карусели
+// загрузка JSON и запуск
 document.addEventListener('DOMContentLoaded', async () => {
   try {
-    const response = await fetch('data/projects.json');
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const images = await response.json();
+    const res    = await fetch('data/projects.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const images = await res.json();
 
-    const svgDoc = document; // если SVG встроен прямо в HTML
+    const svgDoc = document; // inline SVG
     const carousel = new Carousel({
       images,
       imgEl:   svgDoc.getElementById('carouselImage'),
@@ -73,7 +70,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       leftEl:  svgDoc.getElementById('arrowLeft'),
       rightEl: svgDoc.getElementById('arrowRight')
     });
-
     carousel.init();
   } catch (err) {
     console.error('Не удалось загрузить массив изображений:', err);
