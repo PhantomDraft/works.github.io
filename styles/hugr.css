@@ -1,36 +1,23 @@
-/* styles/hugr.css */
-.laptop-wrapper {
+.laptop {
+  width: 800px;        /* ширина исходного PNG */
+  height: 500px;       /* высота исходного PNG */
   position: relative;
-  width: 80%;            /* адаптивная ширина */
-  max-width: 800px;
-  aspect-ratio: 1 / 1;    /* исходя из соотношения вашего изображения laptop.png (1024×1024) */
-  margin: 40px auto;
-  background: url('../assets/laptop.png') center/contain no-repeat;
+  background: url('laptop.png') no-repeat center/contain;
 }
 
-.screen {
+.laptop .screen {
   position: absolute;
-  /* Процентные координаты белой области экрана */
-  top: 12%;
-  left: 8%;
-  width: 84%;
-  height: 34%;
+  top: 100px;          /* координаты экрана внутри PNG */
+  left: 120px;
+  width: 560px;        /* размеры области экрана */
+  height: 315px;
   background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 1;             /* под кнопками */
+  /* накладываем маску из прозрачного PNG: белая область — видна, остальное — скрыто */
+  mask-image: url('../assets/laptop.png');
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  /* для браузеров на WebKit */
+  -webkit-mask-image: url('../assets/laptop.png');
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
 }
-
-.nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
-  z-index: 2;
-}
-#prevBtn { left: 4%; }
-#nextBtn { right: 4%; }
