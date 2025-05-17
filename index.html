@@ -8,36 +8,47 @@
 </head>
 <body>
 
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="1024" height="1024"
-     viewBox="0 0 1024 1024">
+  <svg xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       width="1024" height="1024"
+       viewBox="0 0 1024 1024">
 
-  <defs>
-    <!-- Первый: маска-область экрана (чёрный вокруг, белый — окно) -->
-    <mask id="screenMask" maskUnits="userSpaceOnUse">
-      <image
-        href="assets/laptop_black_bg.png"
-        x="0" y="0"
-        width="1024" height="1024"
-      />
-    </mask>
-  </defs>
+    <defs>
+      <mask id="screenMask" maskUnits="userSpaceOnUse">
+        <image
+          href="assets/laptop_black_bg.png"
+          x="0" y="0"
+          width="1024" height="1024"
+        />
+      </mask>
+    </defs>
 
-  <!-- Второй: сам скриншот, показывается только внутри маски -->
-  <image
-    href="assets/cover.png"
-    x="0" y="0"
-    width="1024" height="1024"
-    mask="url(#screenMask)"
-  />
+    <g id="carouselGroup">
+      <a id="carouselLink" xlink:href="" target="_blank">
+        <image
+          id="carouselImage"
+          x="0" y="0"
+          width="1024" height="1024"
+          mask="url(#screenMask)"
+          style="cursor: pointer;"
+        />
+      </a>
+    </g>
 
-  <!-- Третий: слой ноутбука с прозрачным экраном, поверх всего -->
-  <image
-    href="assets/laptop_transparent_screen.png"
-    x="0" y="0"
-    width="1024" height="1024"
-  />
-</svg>
+    <g id="arrowLeft" class="arrow" transform="translate(50,512) rotate(180)" style="cursor: pointer;">
+      <polygon points="0,-40 30,0 0,40" fill="#ffffff" opacity="0.7"/>
+    </g>
+    <g id="arrowRight" class="arrow" transform="translate(974,512)" style="cursor: pointer;">
+      <polygon points="0,-40 30,0 0,40" fill="#ffffff" opacity="0.7"/>
+    </g>
+
+    <image
+      href="assets/laptop_transparent_screen.png"
+      x="0" y="0"
+      width="1024" height="1024"
+    />
+
+  </svg>
 
   <script defer src="scripts/portfolioApp.js"></script>
 </body>
