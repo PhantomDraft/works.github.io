@@ -10,8 +10,41 @@
 
   <svg xmlns="http://www.w3.org/2000/svg"
        xmlns:xlink="http://www.w3.org/1999/xlink"
-       width="1024" height="1024"
-       viewBox="0 0 1024 1024">
+       width="100%" height="100%"
+       viewBox="0 0 1024 1536"
+       preserveAspectRatio="xMidYMid slice">
+
+    <!-- 1) Сплошная "стена" по всему фону -->
+    <rect x="0" y="0" width="100%" height="100%" fill="#000"/>
+
+    <!-- 2) Небо -->
+    <image
+      id="sky"
+      href="assets/sky-day.png"
+      x="0" y="0"
+      width="1024" height="1536"
+      preserveAspectRatio="xMidYMid slice"
+    />
+
+    <!-- 3) Луна (скрыта, будет анимироваться) -->
+    <image
+      id="moon"
+      href="assets/moon-default.png"
+      x="0" y="0"
+      width="1024" height="1536"
+      visibility="hidden"
+    />
+
+    <!-- 4) Рамка-окно поверх всего -->
+    <image
+      href="assets/frame.png"
+      x="0" y="0"
+      width="1024" height="1536"
+    />
+
+    <!-- 5) Чёрные боковые "шторы", если frame.png не растягивается -->
+    <rect x="0"    y="0" width="15%" height="100%" fill="#000"/>
+    <rect x="85%" y="0" width="15%" height="100%" fill="#000"/>
 
     <defs>
       <mask id="screenMask" maskUnits="userSpaceOnUse">
