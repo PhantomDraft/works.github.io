@@ -7,40 +7,37 @@
   <link rel="stylesheet" href="styles/hugr.css">
 </head>
 <body>
-<div class="laptop">
 
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="1024"
-  height="1024"
-  viewBox="0 0 1024 1024"
->
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1024" height="1024"
+     viewBox="0 0 1024 1024">
+
   <defs>
-    <!-- Маска: черный фон + белый прямоугольник по области экрана -->
-    <mask id="mask-screen" maskUnits="userSpaceOnUse"
-          x="14" y="88" width="988" height="878">
-      <rect x="0" y="0" width="1024" height="1024" fill="black"/>
-      <rect x="14" y="88" width="988" height="878" fill="white"/>
+    <!-- Первый: маска-область экрана (чёрный вокруг, белый — окно) -->
+    <mask id="screenMask" maskUnits="userSpaceOnUse">
+      <image
+        href="assets/laptop_black_bg.png"
+        x="0" y="0"
+        width="1024" height="1024"
+      />
     </mask>
   </defs>
 
-  <!-- Скриншот (cover.png), обрезанный и вписанный в экран -->
+  <!-- Второй: сам скриншот, показывается только внутри маски -->
   <image
     href="assets/cover.png"
-    x="14" y="88"
-    width="988" height="878"
-    preserveAspectRatio="xMidYMid slice"
-    mask="url(#mask-screen)"
+    x="0" y="0"
+    width="1024" height="1024"
+    mask="url(#screenMask)"
   />
 
-  <!-- Рамка ноутбука (laptop.png) поверх -->
+  <!-- Третий: слой ноутбука с прозрачным экраном, поверх всего -->
   <image
-    href="assets/laptop.png"
+    href="assets/laptop_transparent_screen.png"
     x="0" y="0"
     width="1024" height="1024"
   />
 </svg>
-
 
   <script defer src="scripts/portfolioApp.js"></script>
 </body>
