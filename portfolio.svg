@@ -45,7 +45,7 @@
       <animateTransform
         attributeName="transform"
         type="translate"
-        from="225 -1500" to="225 350"
+        from="225 -1500" to="225 300"
         begin="0s" dur="2s"
         fill="freeze"/>
     </image>
