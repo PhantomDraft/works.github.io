@@ -3,16 +3,14 @@ import { Carousel } from './carousel.js';
 
 class App {
   constructor() {
-    this.filter = this.getFilterFromURL();        // читает ?filter=scandinavian
-    this.images = [];                              // полный массив
-    this.filtered = [];                            // после фильтрации
-    // элементы SVG
+    this.filter = this.getFilterFromURL();
+    this.images = [];
+    this.filtered = [];
     this.moon    = document.getElementById('moon');
     this.burger  = document.getElementById('burger');
     this.overlay = document.getElementById('overlay');
     this.scandi  = document.getElementById('scandiFilter');
     this.close   = document.getElementById('closeFilter');
-    // карусель
     this.carousel = new Carousel({
       imgEl:   document.getElementById('carouselImage'),
       linkEl:  document.getElementById('carouselLink'),
@@ -32,16 +30,13 @@ class App {
   }
 
   initUI() {
-    // burger
     this.burger.addEventListener('click', () => {
       this.overlay.setAttribute('visibility','visible');
     });
-    // apply filter
     this.scandi.addEventListener('click', () => {
       this.setFilter('scandinavian');
       this.overlay.setAttribute('visibility','hidden');
     });
-    // close overlay (remove filter)
     this.close.addEventListener('click', () => {
       this.setFilter(null);
       this.overlay.setAttribute('visibility','hidden');
@@ -63,24 +58,23 @@ class App {
     this.filter = value;
     const url = new URL(location);
     if (value) url.searchParams.set('filter', value);
-    else      url.searchParams.delete('filter');
+    else       url.searchParams.delete('filter');
     history.replaceState(null,'',url);
     this.applyFilterFromParam();
   }
 
   getFilterFromURL() {
     const p = new URL(location).searchParams.get('filter');
-    return p=== 'scandinavian' ? p : null;
+    return p === 'scandinavian' ? p : null;
   }
 
   animateMoonIn() {
-    // сдвинем moon снизу своего начального y
-    requestAnimationFrame(()=> {
+    requestAnimationFrame(() => {
       this.moon.setAttribute('transform','translate(0,1500)');
     });
   }
 }
 
-document.addEventListener('DOMContentLoaded', ()=> {
+document.addEventListener('DOMContentLoaded', () => {
   new App().init();
 });

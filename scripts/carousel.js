@@ -14,8 +14,8 @@ export class Carousel {
     this.leftEl .addEventListener('click', () => this.prev());
     this.rightEl.addEventListener('click', () => this.next());
     window.addEventListener('keydown', e => {
-      if (e.key==='ArrowLeft')  this.prev();
-      if (e.key==='ArrowRight') this.next();
+      if (e.key === 'ArrowLeft')  this.prev();
+      if (e.key === 'ArrowRight') this.next();
     });
     this.initTouch();
   }
@@ -28,21 +28,22 @@ export class Carousel {
 
   show() {
     const it = this.images[this.current];
-    this.imgEl.href.baseVal    = it.thumbnail;
-    this.linkEl.href.baseVal   = it.url;
+    this.imgEl.href.baseVal  = it.thumbnail;
+    this.linkEl.href.baseVal = it.url;
   }
 
-  next() { this.current=(this.current+1)%this.images.length; this.show(); }
-  prev() { this.current=(this.current-1+this.images.length)%this.images.length; this.show(); }
+  next() { this.current = (this.current + 1) % this.images.length; this.show(); }
+  prev() { this.current = (this.current - 1 + this.images.length) % this.images.length; this.show(); }
 
   initTouch() {
-    let startX=null; const threshold=50;
-    this.imgEl.addEventListener('touchstart', e=> startX=e.touches[0].clientX);
-    this.imgEl.addEventListener('touchend', e=> {
-      const diff=e.changedTouches[0].clientX-startX;
-      if      (diff>threshold)  this.prev();
-      else if (diff<-threshold) this.next();
-      startX=null;
+    let startX = null;
+    const threshold = 50;
+    this.imgEl.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+    this.imgEl.addEventListener('touchend', e => {
+      const diff = e.changedTouches[0].clientX - startX;
+      if (diff > threshold)       this.prev();
+      else if (diff < -threshold) this.next();
+      startX = null;
     });
   }
 }
