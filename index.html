@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ноутбук с адаптивным экраном</title>
+  <title>Projects Created by PD</title>
   <!--
     Dynamically set <base> so that all relative URLs resolve correctly
     whether we’re on the paid custom domain or on GitHub Pages.
@@ -34,30 +34,13 @@
   <object
     id="visitCard"
     type="image/svg+xml"
-    data="/portfolio.svg?v=0.1"
+    data="portfolio.svg?v=0.1"
     width="1024"
     height="1500"
-    aria-label="Интерактивная визитная карточка">
+    aria-label="Interactive business card">
     <!-- Fallback if <object> is not supported -->
-    Ваш браузер не поддерживает встраиваемые SVG.
-    <img src="/portfolio.svg?v=0.1" alt="Визитная карточка">
+    Your browser does not support embedded SVG.
+    <img src="portfolio.svg?v=0.1" alt="Business card">
   </object>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const obj = document.getElementById('visitCard');
-      obj.addEventListener('load', () => {
-        const svgDoc = obj.contentDocument;
-        // Highlight burger icon on hover
-        const burger = svgDoc.getElementById('burger');
-        burger.addEventListener('mouseenter', () => {
-          burger.style.opacity = 0.7;
-        });
-        burger.addEventListener('mouseleave', () => {
-          burger.style.opacity = 1;
-        });
-        // ...you can add more interactions here...
-      });
-    });
-  </script>
 </body>
 </html>
