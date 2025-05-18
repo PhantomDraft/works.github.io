@@ -8,7 +8,7 @@
   <defs>
     <!-- Window mask -->
     <mask id="windowMask" maskUnits="userSpaceOnUse">
-      <image href="assets/frame-mask.png"
+      <image href="../frame-mask.png"
              x="0" y="0"
              width="1024" height="1500"
              preserveAspectRatio="xMidYMid slice"/>
@@ -16,7 +16,7 @@
 
     <!-- Laptop screen mask -->
     <mask id="screenMask" maskUnits="userSpaceOnUse">
-      <image href="assets/laptop_black_bg.png"
+      <image href="../laptop_black_bg.png"
              x="0" y="300"
              width="1024" height="1024"/>
     </mask>
@@ -35,18 +35,18 @@
   <!-- 1) Background behind window -->
   <g mask="url(#windowMask)" id="backScene">
     <image id="sky"
-           href="assets/sky-night.png"
+           href="../sky-night.png"
            x="0" y="0"
            width="1024" height="1500"/>
     <image id="moon"
-           href="assets/moon-default.png"
+           href="../moon-default.png"
            x="0" y="-1500"
            width="1024" height="1500"
            style="transition: transform 2s ease-out;"/>
   </g>
 
   <!-- 2) Window frame -->
-  <image href="assets/frame.png"
+  <image href="../frame.png"
          x="0" y="0"
          width="1024" height="1500"
          preserveAspectRatio="xMidYMid slice"/>
@@ -80,7 +80,7 @@
   </g>
 
   <!-- 6) Laptop frame and arrows -->
-  <image href="assets/laptop_transparent_screen.png"
+  <image href="../laptop_transparent_screen.png"
          x="0" y="300"
          width="1024" height="1024"/>
   <g id="arrowLeft" transform="translate(50,812) rotate(180)" style="cursor:pointer;">
@@ -94,8 +94,8 @@
   <script type="application/ecmascript"><![CDATA[
     // Projects
     const projects = [
-      { title: "Horror Site",      thumbnail: "assets/cover.png",  url: "https://example.com/horror",    category: "horror" },
-      { title: "Scandinavian Blog", thumbnail: "assets/cover2.png", url: "https://example.com/scandi",    category: "scandinavian" }
+      { title: "Horror Site",      thumbnail: "../cover.png",  url: "https://example.com/horror",    category: "horror" },
+      { title: "Scandinavian Blog", thumbnail: "../cover2.png", url: "https://example.com/scandi",    category: "scandinavian" }
     ];
 
     // Carousel
