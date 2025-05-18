@@ -9,96 +9,36 @@
 <body>
 
 
-<svg xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="1024" height="1500"
-     viewBox="0 0 1024 1500"
-     preserveAspectRatio="xMidYMid slice">
+  <!-- Встраиваем SVG как объект -->
+  <object
+    id="visitCard"
+    type="image/svg+xml"
+    data="/assets/portfolio.svg"
+    width="1024"
+    height="1500"
+    aria-label="Интерактивная визитная карточка">
+    <!-- Фолбэк на случай, если <object> не поддерживается -->
+    Ваш браузер не поддерживает встраиваемые SVG. 
+    <img src="/assets/visitchart.svg" alt="Визитная карточка"/>
+  </object>
 
-  <defs>
-    <!-- Маска «окна» -->
-    <mask id="windowMask" maskUnits="userSpaceOnUse">
-      <image href="assets/frame-mask.png"
-             x="0" y="0"
-             width="1024" height="1500"
-             preserveAspectRatio="xMidYMid slice"/>
-    </mask>
-
-    <!-- Маска экрана ноутбука -->
-    <mask id="screenMask" maskUnits="userSpaceOnUse">
-      <image href="assets/laptop_black_bg.png"
-             x="0" y="300"
-             width="1024" height="1024"/>
-    </mask>
-  </defs>
-
-  <!-- 1) Фон за окном -->
-  <g mask="url(#windowMask)" id="backScene">
-    <image id="sky"
-           href="assets/sky-night.png"
-           x="0" y="0"
-           width="1024" height="1500"/>
-    <image id="moon"
-           href="assets/moon-default.png"
-           x="0" y="-1500"
-           width="1024" height="1500"
-           style="transition: transform 2s ease-out;"/>
-  </g>
-
-  <!-- 2) Рамка окна -->
-  <image href="assets/frame.png"
-         x="0" y="0"
-         width="1024" height="1500"
-         preserveAspectRatio="xMidYMid slice"/>
-
-  <!-- 3) Меню-бургер -->
-  <g id="burger" style="cursor:pointer;">
-    <rect x="20" y="20" width="40" height="5" fill="#fff"/>
-    <rect x="20" y="32" width="40" height="5" fill="#fff"/>
-    <rect x="20" y="44" width="40" height="5" fill="#fff"/>
-  </g>
-
-  <!-- 4) Полупрозрачное выпадающее меню фильтров -->
-  <g id="overlay" visibility="hidden">
-    <rect x="20" y="70" width="200" height="100"
-          fill="rgba(0,0,0,0.6)" rx="8"/>
-    <text id="closeFilter" x="200" y="95"
-          font-size="24" fill="#fff" style="cursor:pointer;">
-      ✕
-    </text>
-    <text id="scandiFilter" x="30" y="100"
-          font-size="20" fill="#fff" style="cursor:pointer;">
-      Скандинавский
-    </text>
-  </g>
-
-  <!-- 5) Карусель -->
-  <g id="carouselGroup">
-    <a id="carouselLink" xlink:href="" target="_blank">
-      <image id="carouselImage"
-             x="0" y="300"
-             width="1024" height="1024"
-             mask="url(#screenMask)"
-             style="cursor: pointer;"/>
-    </a>
-  </g>
-
-  <!-- 6) Рамка ноутбука и стрелки -->
-  <image href="assets/laptop_transparent_screen.png"
-         x="0" y="300"
-         width="1024" height="1024"/>
-  <g id="arrowLeft" transform="translate(50,812) rotate(180)"
-     style="cursor:pointer;">
-    <polygon points="0,-40 30,0 0,40" fill="#b22222" opacity="0.7"/>
-  </g>
-  <g id="arrowRight" transform="translate(974,812)"
-     style="cursor:pointer;">
-    <polygon points="0,-40 30,0 0,40" fill="#b22222" opacity="0.7"/>
-  </g>
-
-</svg>
-
-<script type="module" src="scripts/portfolioApp.js"></script>
+  <script>
+    // ждём, пока объект загрузится, и инициализируем взаимодействие, 
+    // если нужно напрямую дергать SVG из родителя
+    const obj = document.getElementById('visitCard');
+    obj.addEventListener('load', () => {
+      const svgDoc = obj.contentDocument;
+      // Например, подсвечиваем бургер:
+      const burger = svgDoc.getElementById('burger');
+      burger.addEventListener('mouseenter', () => {
+        burger.style.opacity = 0.7;
+      });
+      burger.addEventListener('mouseleave', () => {
+        burger.style.opacity = 1;
+      });
+      // и т.д.
+    });
+  </script>
 
 </body>
 </html>

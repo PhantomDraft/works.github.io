@@ -22,6 +22,16 @@
     </mask>
   </defs>
 
+  <!-- Loading overlay -->
+  <g id="loadingOverlay">
+    <rect x="0" y="0" width="1024" height="1500"
+          fill="rgba(0,0,0,0.7)"/>
+    <text x="512" y="750" font-size="48" fill="#fff"
+          text-anchor="middle" alignment-baseline="middle">
+      Ожидаем...
+    </text>
+  </g>
+
   <!-- 1) фон за окном -->
   <g mask="url(#windowMask)" id="backScene">
     <image id="sky"
@@ -38,8 +48,7 @@
   <!-- 2) рамка окна -->
   <image href="assets/frame.png"
          x="0" y="0"
-         width="1024" height="1500"
-         preserveAspectRatio="xMidYMid slice"/>
+         width="1024" height="1500"/>
 
   <!-- 3) меню-бургер -->
   <g id="burger" style="cursor:pointer;">
@@ -84,8 +93,8 @@
   <script type="application/ecmascript"><![CDATA[
     // Проекты
     const projects = [
-      { title: "Horror Site",        thumbnail: "assets/cover.png",  url: "https://example.com/horror",      category: "horror" },
-      { title: "Scandinavian Blog",   thumbnail: "assets/cover2.png", url: "https://example.com/scandi",      category: "scandinavian" }
+      { title: "Horror Site",      thumbnail: "assets/cover.png",  url: "https://example.com/horror",    category: "horror" },
+      { title: "Scandinavian Blog", thumbnail: "assets/cover2.png", url: "https://example.com/scandi",    category: "scandinavian" }
     ];
 
     // Карусель
@@ -99,24 +108,25 @@
         this.leftEl .addEventListener('click', ()=>this.prev());
         this.rightEl.addEventListener('click', ()=>this.next());
         window.addEventListener('keydown', e=>{
-          if(e.key==='ArrowLeft') this.prev();
+          if(e.key==='ArrowLeft')  this.prev();
           if(e.key==='ArrowRight') this.next();
         });
         this.imgEl.addEventListener('touchstart', e=> this._startX=e.touches[0].clientX);
         this.imgEl.addEventListener('touchend', e=>{
-          const d=e.changedTouches[0].clientX-this._startX;
-          if(d>50) this.prev(); if(d<-50) this.next();
+          const d = e.changedTouches[0].clientX - this._startX;
+          if(d>50)  this.prev();
+          if(d<-50) this.next();
         });
       }
-      update(images) { this.images = images; this.current=0; this.show(); }
+      update(images) { this.images = images; this.current = 0; this.show(); }
       show() {
         const it = this.images[this.current];
         if(!it) return;
         this.imgEl.href.baseVal  = it.thumbnail;
         this.linkEl.href.baseVal = it.url;
       }
-      next() { this.current=(this.current+1)%this.images.length; this.show(); }
-      prev() { this.current=(this.current-1+this.images.length)%this.images.length; this.show(); }
+      next() { this.current = (this.current+1)%this.images.length; this.show(); }
+      prev() { this.current = (this.current-1+this.images.length)%this.images.length; this.show(); }
     }
 
     // Инициализация
@@ -124,6 +134,7 @@
       const moon    = document.getElementById('moon');
       const burger  = document.getElementById('burger');
       const overlay = document.getElementById('overlay');
+      const loading= document.getElementById('loadingOverlay');
       const scandi  = document.getElementById('scandiFilter');
       const closeF  = document.getElementById('closeFilter');
       const imgEl   = document.getElementById('carouselImage');
@@ -131,12 +142,15 @@
       const leftEl  = document.getElementById('arrowLeft');
       const rightEl = document.getElementById('arrowRight');
 
+      // Read filter from URL
       const params = new URLSearchParams(window.location.search);
       let filter = params.get('filter')==='scandinavian'? 'scandinavian' : null;
 
+      // Initialize carousel
       const carousel = new Carousel(imgEl, linkEl, leftEl, rightEl, []);
       carousel.init();
 
+      // Apply filter logic
       function applyFilter() {
         if(filter==='scandinavian') {
           moon.setAttribute('href','assets/moon-scandi.png');
@@ -147,28 +161,36 @@
         }
       }
 
-      burger.addEventListener('click', ()=> overlay.setAttribute('visibility','visible'));
+      // Burger click: show menu
+      burger.addEventListener('click', ()=> {
+        overlay.setAttribute('visibility','visible');
+      });
+      // Select Scandinavian filter
       scandi.addEventListener('click', ()=>{
-        filter='scandinavian';
+        filter = 'scandinavian';
         params.set('filter',filter);
         history.replaceState(null,'','?'+params.toString());
         overlay.setAttribute('visibility','hidden');
         applyFilter();
       });
+      // Close menu / clear filter
       closeF.addEventListener('click', ()=>{
-        filter=null;
+        filter = null;
         params.delete('filter');
-        history.replaceState(null,'','?'+params.toString());
+        // Remove '?' completely
+        history.replaceState(null,'', window.location.pathname);
         overlay.setAttribute('visibility','hidden');
         applyFilter();
       });
 
-      // Луна: анимация спуска
+      // Animate moon drop
       requestAnimationFrame(()=>{
         moon.setAttribute('transform','translate(0,1500)');
       });
 
+      // Initial apply + hide loading
       applyFilter();
+      loading.setAttribute('visibility','hidden');
     })();
   ]]></script>
 
