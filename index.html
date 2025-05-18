@@ -4,39 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ноутбук с адаптивным экраном</title>
+
+  <!--
+    Dynamically set <base> so that all relative URLs resolve correctly
+    whether we’re on the paid custom domain or on GitHub Pages.
+  -->
+  <script>
+    (function(){
+      const host = location.host.toLowerCase();
+      // List of custom domains you might use
+      const customDomains = [
+        'phantom-draft.com',
+        'www.phantom-draft.com'
+      ];
+      // If we're on one of the paid custom domains, assets live under /works.github.io/
+      // Otherwise (GitHub Pages or custom domain down), serve from the repo root /
+      const prefix = customDomains.includes(host)
+                   ? '/works.github.io/'
+                   : '/';
+
+      const baseEl = document.createElement('base');
+      baseEl.href = prefix;
+      document.head.prepend(baseEl);
+    })();
+  </script>
+
   <link rel="stylesheet" href="styles/hugr.css">
 </head>
 <body>
 
-
-  <!-- Встраиваем SVG как объект -->
+  <!-- Embed the SVG “business card” as an object -->
   <object
     id="visitCard"
     type="image/svg+xml"
-    data="/assets/svg/portfolio.svg?v=0.2"
+    data="assets/svg/portfolio.svg?v=0.2"
     width="1024"
     height="1500"
     aria-label="Интерактивная визитная карточка">
-    <!-- Фолбэк на случай, если <object> не поддерживается -->
-    Ваш браузер не поддерживает встраиваемые SVG. 
-    <img src="/assets/svg/portfolio.svg?v=0.2" alt="Визитная карточка"/>
+    <!-- Fallback if <object> is not supported -->
+    Ваш браузер не поддерживает встраиваемые SVG.
+    <img src="assets/svg/portfolio.svg?v=0.2" alt="Визитная карточка"/>
   </object>
 
   <script>
-    // ждём, пока объект загрузится, и инициализируем взаимодействие, 
-    // если нужно напрямую дергать SVG из родителя
-    const obj = document.getElementById('visitCard');
-    obj.addEventListener('load', () => {
-      const svgDoc = obj.contentDocument;
-      // Например, подсвечиваем бургер:
-      const burger = svgDoc.getElementById('burger');
-      burger.addEventListener('mouseenter', () => {
-        burger.style.opacity = 0.7;
+    document.addEventListener('DOMContentLoaded', () => {
+      const obj = document.getElementById('visitCard');
+      obj.addEventListener('load', () => {
+        const svgDoc = obj.contentDocument;
+
+        // Highlight burger icon on hover
+        const burger = svgDoc.getElementById('burger');
+        burger.addEventListener('mouseenter', () => {
+          burger.style.opacity = 0.7;
+        });
+        burger.addEventListener('mouseleave', () => {
+          burger.style.opacity = 1;
+        });
+
+        // ...you can add more interactions here...
       });
-      burger.addEventListener('mouseleave', () => {
-        burger.style.opacity = 1;
-      });
-      // и т.д.
     });
   </script>
 
