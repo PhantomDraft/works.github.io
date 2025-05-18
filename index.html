@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ноутбук с адаптивным экраном</title>
-
   <!--
     Dynamically set <base> so that all relative URLs resolve correctly
     whether we’re on the paid custom domain or on GitHub Pages.
@@ -28,16 +27,14 @@
       document.head.prepend(baseEl);
     })();
   </script>
-
   <link rel="stylesheet" href="styles/hugr.css">
 </head>
 <body>
-
   <!-- Embed the SVG “business card” as an object -->
   <object
     id="visitCard"
     type="image/svg+xml"
-    data="assets/svg/portfolio.svg?v=0.2"
+    data="assets/svg/portfolio.svg?v=0.5"
     width="1024"
     height="1500"
     aria-label="Интерактивная визитная карточка">
@@ -45,13 +42,11 @@
     Ваш браузер не поддерживает встраиваемые SVG.
     <img src="assets/svg/portfolio.svg?v=0.2" alt="Визитная карточка"/>
   </object>
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const obj = document.getElementById('visitCard');
       obj.addEventListener('load', () => {
         const svgDoc = obj.contentDocument;
-
         // Highlight burger icon on hover
         const burger = svgDoc.getElementById('burger');
         burger.addEventListener('mouseenter', () => {
@@ -60,11 +55,9 @@
         burger.addEventListener('mouseleave', () => {
           burger.style.opacity = 1;
         });
-
         // ...you can add more interactions here...
       });
     });
   </script>
-
 </body>
 </html>
