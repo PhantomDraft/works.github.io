@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1024" height="1500"
+     viewBox="0 0 1024 1500"
+     preserveAspectRatio="xMidYMid slice">
+
+  <defs>
+    <!-- Маска «окна» -->
+    <mask id="windowMask" maskUnits="userSpaceOnUse">
+      <image href="assets/frame-mask.png"
+             x="0" y="0"
+             width="1024" height="1500"
+             preserveAspectRatio="xMidYMid slice"/>
+    </mask>
+
+    <!-- Маска экрана ноутбука -->
+    <mask id="screenMask" maskUnits="userSpaceOnUse">
+      <image href="assets/laptop_black_bg.png"
+             x="0" y="300"
+             width="1024" height="1024"/>
+    </mask>
+  </defs>
+
+  <!-- 1) фон за окном -->
+  <g mask="url(#windowMask)" id="backScene">
+    <image id="sky"
+           href="assets/sky-night.png"
+           x="0" y="0"
+           width="1024" height="1500"/>
+    <image id="moon"
+           href="assets/moon-default.png"
+           x="0" y="-1500"
+           width="1024" height="1500"
+           style="transition: transform 2s ease-out;"/>
+  </g>
+
+  <!-- 2) рамка окна -->
+  <image href="assets/frame.png"
+         x="0" y="0"
+         width="1024" height="1500"
+         preserveAspectRatio="xMidYMid slice"/>
+
+  <!-- 3) меню-бургер -->
+  <g id="burger" style="cursor:pointer;">
+    <rect x="20" y="20" width="40" height="5" fill="#fff"/>
+    <rect x="20" y="32" width="40" height="5" fill="#fff"/>
+    <rect x="20" y="44" width="40" height="5" fill="#fff"/>
+  </g>
+
+  <!-- 4) выпадающее меню фильтров -->
+  <g id="overlay" visibility="hidden">
+    <rect x="20" y="70" width="200" height="100"
+          fill="rgba(0,0,0,0.6)" rx="8"/>
+    <text id="closeFilter" x="200" y="95"
+          font-size="24" fill="#fff" style="cursor:pointer;">✕</text>
+    <text id="scandiFilter" x="30" y="100"
+          font-size="20" fill="#fff" style="cursor:pointer;">Скандинавский</text>
+  </g>
+
+  <!-- 5) карусель -->
+  <g id="carouselGroup">
+    <a id="carouselLink" xlink:href="" target="_blank">
+      <image id="carouselImage"
+             x="0" y="300"
+             width="1024" height="1024"
+             mask="url(#screenMask)"
+             style="cursor: pointer;"/>
+    </a>
+  </g>
+
+  <!-- 6) рамка ноутбука и стрелки -->
+  <image href="assets/laptop_transparent_screen.png"
+         x="0" y="300"
+         width="1024" height="1024"/>
+  <g id="arrowLeft" transform="translate(50,812) rotate(180)" style="cursor:pointer;">
+    <polygon points="0,-40 30,0 0,40" fill="#b22222" opacity="0.7"/>
+  </g>
+  <g id="arrowRight" transform="translate(974,812)" style="cursor:pointer;">
+    <polygon points="0,-40 30,0 0,40" fill="#b22222" opacity="0.7"/>
+  </g>
+
+  <!-- 7) Встроенный скрипт управления -->
+  <script type="application/ecmascript"><![CDATA[
+    // Проекты
+    const projects = [
+      { title: "Horror Site",        thumbnail: "assets/cover.png",  url: "https://example.com/horror",      category: "horror" },
+      { title: "Scandinavian Blog",   thumbnail: "assets/cover2.png", url: "https://example.com/scandi",      category: "scandinavian" }
+    ];
+
+    // Карусель
+    class Carousel {
+      constructor(imgEl, linkEl, leftEl, rightEl, images) {
+        this.images = images; this.imgEl = imgEl; this.linkEl = linkEl;
+        this.leftEl = leftEl; this.rightEl = rightEl; this.current = 0;
+      }
+      init() {
+        this.show();
+        this.leftEl .addEventListener('click', ()=>this.prev());
+        this.rightEl.addEventListener('click', ()=>this.next());
+        window.addEventListener('keydown', e=>{
+          if(e.key==='ArrowLeft') this.prev();
+          if(e.key==='ArrowRight') this.next();
+        });
+        this.imgEl.addEventListener('touchstart', e=> this._startX=e.touches[0].clientX);
+        this.imgEl.addEventListener('touchend', e=>{
+          const d=e.changedTouches[0].clientX-this._startX;
+          if(d>50) this.prev(); if(d<-50) this.next();
+        });
+      }
+      update(images) { this.images = images; this.current=0; this.show(); }
+      show() {
+        const it = this.images[this.current];
+        if(!it) return;
+        this.imgEl.href.baseVal  = it.thumbnail;
+        this.linkEl.href.baseVal = it.url;
+      }
+      next() { this.current=(this.current+1)%this.images.length; this.show(); }
+      prev() { this.current=(this.current-1+this.images.length)%this.images.length; this.show(); }
+    }
+
+    // Инициализация
+    (function(){
+      const moon    = document.getElementById('moon');
+      const burger  = document.getElementById('burger');
+      const overlay = document.getElementById('overlay');
+      const scandi  = document.getElementById('scandiFilter');
+      const closeF  = document.getElementById('closeFilter');
+      const imgEl   = document.getElementById('carouselImage');
+      const linkEl  = document.getElementById('carouselLink');
+      const leftEl  = document.getElementById('arrowLeft');
+      const rightEl = document.getElementById('arrowRight');
+
+      const params = new URLSearchParams(window.location.search);
+      let filter = params.get('filter')==='scandinavian'? 'scandinavian' : null;
+
+      const carousel = new Carousel(imgEl, linkEl, leftEl, rightEl, []);
+      carousel.init();
+
+      function applyFilter() {
+        if(filter==='scandinavian') {
+          moon.setAttribute('href','assets/moon-scandi.png');
+          carousel.update(projects.filter(p=>p.category==='scandinavian'));
+        } else {
+          moon.setAttribute('href','assets/moon-default.png');
+          carousel.update(projects);
+        }
+      }
+
+      burger.addEventListener('click', ()=> overlay.setAttribute('visibility','visible'));
+      scandi.addEventListener('click', ()=>{
+        filter='scandinavian';
+        params.set('filter',filter);
+        history.replaceState(null,'','?'+params.toString());
+        overlay.setAttribute('visibility','hidden');
+        applyFilter();
+      });
+      closeF.addEventListener('click', ()=>{
+        filter=null;
+        params.delete('filter');
+        history.replaceState(null,'','?'+params.toString());
+        overlay.setAttribute('visibility','hidden');
+        applyFilter();
+      });
+
+      // Луна: анимация спуска
+      requestAnimationFrame(()=>{
+        moon.setAttribute('transform','translate(0,1500)');
+      });
+
+      applyFilter();
+    })();
+  ]]></script>
+
+</svg>
