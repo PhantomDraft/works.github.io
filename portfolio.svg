@@ -3,7 +3,8 @@
      xmlns:xlink="http://www.w3.org/1999/xlink"
      width="1024" height="1500"
      viewBox="0 0 1024 1500"
-     preserveAspectRatio="xMidYMid slice">
+     preserveAspectRatio="xMidYMid slice"
+     style="width:100%;height:auto;max-height:1500px;">
 
   <defs>
     <mask id="windowMask" maskUnits="userSpaceOnUse">
