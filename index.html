@@ -29,8 +29,9 @@
   </script>
   <link rel="stylesheet" href="styles/hugr.css">
 </head>
+
 <body>
-  <!-- Embed the SVG “business card” as an object -->
+
   <object
     id="visitCard"
     type="image/svg+xml"
@@ -43,19 +44,18 @@
     <img src="portfolio.svg?v=0.1" alt="Business card">
   </object>
 
-  <!-- Новый скрипт для прокидывания ?filter=… внутрь SVG -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Читаем параметр filter из адресной строки страницы
+      // Read the 'filter' parameter from the page URL
       const params = new URLSearchParams(window.location.search);
       const filter = params.get('filter');
       if (!filter) return;
 
       const card = document.getElementById('visitCard');
 
-      // 1) Обновляем URL у <object> и у вложенного <img>
+      // 1) Update the URL on the <object> element and its nested <img>
       const originalData = card.getAttribute('data');
-      // Используем конструктор URL, чтобы корректно работать с existing query
+      // Use the URL constructor to correctly manage existing query parameters
       const dataUrl = new URL(originalData, window.location.href);
       dataUrl.searchParams.set('filter', filter);
       card.setAttribute('data', dataUrl.href);
@@ -65,12 +65,13 @@
         fallbackImg.src = dataUrl.href;
       }
 
-      // 2) После загрузки SVG выставляем data-filter прямо на <svg>
+      // 2) Once the SVG has loaded, set the 'data-filter' attribute directly on the <svg>
       card.addEventListener('load', () => {
         const svgEl = card.contentDocument.documentElement;
         svgEl.setAttribute('data-filter', filter);
       });
     });
   </script>
+
 </body>
 </html>
