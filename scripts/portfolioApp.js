@@ -1,77 +1,86 @@
-class Carousel {
-  constructor({ images, imgEl, linkEl, leftEl, rightEl }) {
-    this.images  = images;
-    this.imgEl    = imgEl;
-    this.linkEl   = linkEl;
-    this.leftEl   = leftEl;
-    this.rightEl  = rightEl;
-    this.current  = 0;
-  }
+// scripts/portfolioApp.js
+import { Carousel } from './carousel.js';
 
-  init() {
-    if (!this.images.length) return;
-    this.show();
-    this.leftEl .addEventListener('click', () => this.prev());
-    this.rightEl.addEventListener('click', () => this.next());
-    window.addEventListener('keydown', ({ key }) => {
-      if (key === 'ArrowLeft')  this.prev();
-      if (key === 'ArrowRight') this.next();
+class App {
+  constructor() {
+    this.filter = this.getFilterFromURL();        // читает ?filter=scandinavian
+    this.images = [];                              // полный массив
+    this.filtered = [];                            // после фильтрации
+    // элементы SVG
+    this.moon    = document.getElementById('moon');
+    this.burger  = document.getElementById('burger');
+    this.overlay = document.getElementById('overlay');
+    this.scandi  = document.getElementById('scandiFilter');
+    this.close   = document.getElementById('closeFilter');
+    // карусель
+    this.carousel = new Carousel({
+      imgEl:   document.getElementById('carouselImage'),
+      linkEl:  document.getElementById('carouselLink'),
+      leftEl:  document.getElementById('arrowLeft'),
+      rightEl: document.getElementById('arrowRight'),
+      images:  []
     });
-    this.initTouch();
   }
 
-  show() {
-    const { thumbnail, url } = this.images[this.current];
-    // Вариант B: через .href.baseVal
-    this.imgEl .href.baseVal = thumbnail;
-    this.linkEl.href.baseVal = url;
+  async init() {
+    const resp = await fetch('data/projects.json');
+    this.images = await resp.json();
+    this.applyFilterFromParam();
+    this.initUI();
+    this.animateMoonIn();
+    this.carousel.init();
   }
 
-  next() {
-    this.current = (this.current + 1) % this.images.length;
-    this.show();
-  }
-
-  prev() {
-    this.current = (this.current - 1 + this.images.length) % this.images.length;
-    this.show();
-  }
-
-  initTouch() {
-    let startX = null;
-    const threshold = 50;
-
-    this.imgEl.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
+  initUI() {
+    // burger
+    this.burger.addEventListener('click', () => {
+      this.overlay.setAttribute('visibility','visible');
     });
+    // apply filter
+    this.scandi.addEventListener('click', () => {
+      this.setFilter('scandinavian');
+      this.overlay.setAttribute('visibility','hidden');
+    });
+    // close overlay (remove filter)
+    this.close.addEventListener('click', () => {
+      this.setFilter(null);
+      this.overlay.setAttribute('visibility','hidden');
+    });
+  }
 
-    this.imgEl.addEventListener('touchend', e => {
-      if (startX === null) return;
-      const diff = e.changedTouches[0].clientX - startX;
-      if      (diff >  threshold) this.prev();
-      else if (diff < -threshold) this.next();
-      startX = null;
+  applyFilterFromParam() {
+    if (this.filter === 'scandinavian') {
+      this.moon.setAttribute('href','assets/moon-scandi.png');
+      this.filtered = this.images.filter(i => i.category==='scandinavian');
+    } else {
+      this.moon.setAttribute('href','assets/moon-default.png');
+      this.filtered = [...this.images];
+    }
+    this.carousel.updateImages(this.filtered);
+  }
+
+  setFilter(value) {
+    this.filter = value;
+    const url = new URL(location);
+    if (value) url.searchParams.set('filter', value);
+    else      url.searchParams.delete('filter');
+    history.replaceState(null,'',url);
+    this.applyFilterFromParam();
+  }
+
+  getFilterFromURL() {
+    const p = new URL(location).searchParams.get('filter');
+    return p=== 'scandinavian' ? p : null;
+  }
+
+  animateMoonIn() {
+    // сдвинем moon снизу своего начального y
+    requestAnimationFrame(()=> {
+      this.moon.setAttribute('transform','translate(0,1500)');
     });
   }
 }
 
-// загрузка JSON и запуск
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const res    = await fetch('data/projects.json');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const images = await res.json();
-
-    const svgDoc = document; // inline SVG
-    const carousel = new Carousel({
-      images,
-      imgEl:   svgDoc.getElementById('carouselImage'),
-      linkEl:  svgDoc.getElementById('carouselLink'),
-      leftEl:  svgDoc.getElementById('arrowLeft'),
-      rightEl: svgDoc.getElementById('arrowRight')
-    });
-    carousel.init();
-  } catch (err) {
-    console.error('Не удалось загрузить массив изображений:', err);
-  }
+document.addEventListener('DOMContentLoaded', ()=> {
+  new App().init();
 });

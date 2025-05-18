@@ -15,76 +15,84 @@
      preserveAspectRatio="xMidYMid slice">
 
   <defs>
-    <!-- Маска «окна»: frame-mask.png -->
+    <!-- окно -->
     <mask id="windowMask" maskUnits="userSpaceOnUse">
-      <image
-        href="assets/frame-mask.png"
-        x="0" y="0"
-        width="1024" height="1500"
-        preserveAspectRatio="xMidYMid slice"/>
+      <image href="assets/frame-mask.png" x="0" y="0" width="1024" height="1500"/>
     </mask>
 
-    <!-- Маска экрана ноутбука -->
+    <!-- экран ноутбука -->
     <mask id="screenMask" maskUnits="userSpaceOnUse">
-      <image
-        href="assets/laptop_black_bg.png"
-        x="0" y="300"
-        width="1024" height="1024"/>
+      <image href="assets/laptop_black_bg.png" x="0" y="300" width="1024" height="1024"/>
     </mask>
+
+    <!-- blur-фильтр для overlay -->
+    <filter id="bgBlur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5"/>
+    </filter>
   </defs>
 
-  <!-- 1) Фон за окном: небо + луна, обрезанные по форме окна -->
-  <g mask="url(#windowMask)">
-    <image
-      id="sky"
-      href="assets/sky-night.png"
-      x="0" y="0"
-      width="1024" height="1500"
-      preserveAspectRatio="xMidYMid slice"/>
-    <image
-      id="moon"
-      href="assets/moon-default.png"
-      x="0" y="0"
-      width="1024" height="1500"
-      visibility="hidden"/>
+  <!-- 1) фон за окном -->
+  <g mask="url(#windowMask)" id="backScene">
+    <image id="sky"
+           href="assets/sky-night.png"
+           x="0" y="0"
+           width="1024" height="1500"/>
+    <image id="moon"
+           href="assets/moon-default.png"
+           x="0" y="-1500"
+           width="1024" height="1500"
+           style="transition: transform 2s ease-out;"
+    />
   </g>
 
-  <!-- 2) Рамка окна поверх всего -->
-  <image
-    href="assets/frame.png"
-    x="0" y="0"
-    width="1024" height="1500"
-    preserveAspectRatio="xMidYMid slice"/>
+  <!-- 2) рамка окна -->
+  <image href="assets/frame.png"
+         x="0" y="0"
+         width="1024" height="1500"/>
 
-  <!-- 3) Карусель внутри экрана ноутбука -->
+  <!-- 3) меню-бургер -->
+  <g id="burger" style="cursor:pointer;">
+    <rect x="20" y="20" width="40" height="5" fill="#fff"/>
+    <rect x="20" y="32" width="40" height="5" fill="#fff"/>
+    <rect x="20" y="44" width="40" height="5" fill="#fff"/>
+  </g>
+
+  <!-- 4) overlay-меню (скрыто) -->
+  <g id="overlay" visibility="hidden">
+    <rect x="0" y="0" width="1024" height="1500" fill="rgba(0,0,0,0.5)"/>
+    <g filter="url(#bgBlur)">
+      <rect x="200" y="200" width="624" height="600" fill="#fff" rx="20"/>
+      <text id="closeFilter" x="800" y="240" font-size="32" fill="#333" style="cursor:pointer;">✕</text>
+      <text id="scandiFilter" x="300" y="300" font-size="48" fill="#333" style="cursor:pointer;">
+        Скандинавский
+      </text>
+    </g>
+  </g>
+
+  <!-- 5) карусель -->
   <g id="carouselGroup">
     <a id="carouselLink" xlink:href="" target="_blank">
-      <image
-        id="carouselImage"
-        x="0" y="
-        190"
-        width="1024" height="1024"
-        mask="url(#screenMask)"
-        style="cursor: pointer;"/>
+      <image id="carouselImage"
+             x="0" y="300"
+             width="1024" height="1024"
+             mask="url(#screenMask)"
+             style="cursor: pointer;"/>
     </a>
   </g>
 
-  <!-- 4) Рамка ноутбука -->
-  <image
-    href="assets/laptop_transparent_screen.png"
-    x="0" y="300"
-    width="1024" height="1024"/>
-
-  <!-- 5) Навигационные стрелки -->
-  <g id="arrowLeft" transform="translate(50,512) rotate(180)" style="cursor: pointer;">
+  <!-- 6) рамка ноутбука и стрелки -->
+  <image href="assets/laptop_transparent_screen.png"
+         x="0" y="300"
+         width="1024" height="1024"/>
+  <g id="arrowLeft"  transform="translate(50,812) rotate(180)" style="cursor:pointer;">
     <polygon points="0,-40 30,0 0,40" fill="#b22222" opacity="0.7"/>
   </g>
-  <g id="arrowRight" transform="translate(974,512)" style="cursor: pointer;">
+  <g id="arrowRight" transform="translate(974,812)" style="cursor:pointer;">
     <polygon points="0,-40 30,0 0,40" fill="#b22222" opacity="0.7"/>
   </g>
-
 </svg>
 
-  <script defer src="scripts/portfolioApp.js"></script>
+<script type="module" src="scripts/portfolioApp.js"></script>
+
 </body>
 </html>
