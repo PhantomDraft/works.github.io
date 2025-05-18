@@ -42,5 +42,35 @@
     Your browser does not support embedded SVG.
     <img src="portfolio.svg?v=0.1" alt="Business card">
   </object>
+
+  <!-- Новый скрипт для прокидывания ?filter=… внутрь SVG -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Читаем параметр filter из адресной строки страницы
+      const params = new URLSearchParams(window.location.search);
+      const filter = params.get('filter');
+      if (!filter) return;
+
+      const card = document.getElementById('visitCard');
+
+      // 1) Обновляем URL у <object> и у вложенного <img>
+      const originalData = card.getAttribute('data');
+      // Используем конструктор URL, чтобы корректно работать с existing query
+      const dataUrl = new URL(originalData, window.location.href);
+      dataUrl.searchParams.set('filter', filter);
+      card.setAttribute('data', dataUrl.href);
+
+      const fallbackImg = card.querySelector('img');
+      if (fallbackImg) {
+        fallbackImg.src = dataUrl.href;
+      }
+
+      // 2) После загрузки SVG выставляем data-filter прямо на <svg>
+      card.addEventListener('load', () => {
+        const svgEl = card.contentDocument.documentElement;
+        svgEl.setAttribute('data-filter', filter);
+      });
+    });
+  </script>
 </body>
 </html>
