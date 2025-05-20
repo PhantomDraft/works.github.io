@@ -72,14 +72,9 @@
       // 3) Also scroll the host document down to the card after it loads
       const card = document.getElementById('visitCard');
       card.addEventListener('load', () => {
+        // small delay to let everything settle
         setTimeout(() => {
-          const svgDoc = card.contentDocument;
-          const svgWin = card.contentWindow;
-          const el     = svgDoc.getElementById('carouselGroup');
-          if (!el) return;
-          // compute y offset *inside* the SVG
-          const targetY = el.getBoundingClientRect().top + svgWin.pageYOffset;
-          svgWin.scrollTo({ top: targetY, behavior: 'smooth' });
+          card.scrollIntoView({ behavior: 'smooth' });
         }, 500);
       });
     });
