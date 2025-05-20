@@ -283,59 +283,41 @@
         applyFilter();
       });
 
+      // smoothScrollTo
+      function smoothScrollTo(toY, duration = 800) {
+        const startY = window.pageYOffset;
+        const change = toY - startY;
+        const startTime = performance.now();
+
+        function easeInOutQuad(t) {
+          return t < 0.5
+            ? 2 * t * t
+            : -1 + (4 - 2 * t) * t;
+        }
+
+        function step(now) {
+          const elapsed = now - startTime;
+          const t = Math.min(elapsed / duration, 1);
+          const eased = easeInOutQuad(t);
+          window.scrollTo(0, startY + change * eased);
+          if (t < 1) requestAnimationFrame(step);
+        }
+
+        requestAnimationFrame(step);
+      }
+
       // applyFilter (!loader)
       applyFilter();
 
-  setTimeout(() => {
-    // элемент внутри SVG
-    const el = document.getElementById('carouselGroup');
-    if (!el) return;
-
-    // высота задержки перед скроллом
-    const delay = 500;
-    // длительность анимации
-    const duration = 1000;
-
-    // функция ease-in-out quad
-    function easeInOutQuad(t) {
-      return t < 0.5
-        ? 2 * t * t
-        : -1 + (4 - 2 * t) * t;
-    }
-
-    // универсальный smoothScroll: на window или window.parent
-    function smoothScroll(toY, ctx, dur) {
-      const startY = ctx.pageYOffset;
-      const change = toY - startY;
-      const startTime = performance.now();
-      function step(now) {
-        const elapsed = now - startTime;
-        const t = Math.min(elapsed / dur, 1);
-        const eased = easeInOutQuad(t);
-        ctx.scrollTo(0, startY + change * eased);
-        if (t < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }
-
-    // вычисляем целевую «Y»
-    let targetY;
-    // если SVG открыт сам по себе → скроллим внутри SVG
-    if (window.parent === window) {
-      targetY = el.getBoundingClientRect().top + window.pageYOffset;
-      smoothScroll(targetY, window, duration);
-    } else {
-      // иначе — встроенный SVG, скроллим страницу-родителя
-      // позиция SVG в окне родителя
-      const svgRect = document.documentElement.getBoundingClientRect();
-      // позиция элемента внутри SVG
-      const elRect  = el.getBoundingClientRect();
-      // и учитываем уже проскролленное родителем
-      const parentYOffset = window.parent.pageYOffset;
-      targetY = svgRect.top + elRect.top + parentYOffset;
-      smoothScroll(targetY, window.parent, duration);
-    }
-  }, 500);
+      // scroll
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const el = document.getElementById('carouselGroup');
+          if (!el) return;
+          const targetY = el.getBoundingClientRect().top + window.pageYOffset;
+          smoothScrollTo(targetY, 1000);  // длительность 1000 мс
+        }, 500);
+      });
     })();
   ]]></script>
 
