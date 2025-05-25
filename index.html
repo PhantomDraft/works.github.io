@@ -4,60 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Projects Created by PD</title>
-
-  <style>
-    /* Reset and page background */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* Overlay + spinner */
-    #svgOverlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    #svgOverlay .spinner {
-      width: 50px; height: 50px;
-      border: 5px solid rgba(255,255,255,0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* SVG container centering and sizing */
-#visitCard {
-  width: 100%;
-  max-width: 1024px;
-  aspect-ratio: 1024 / 1500;
-  height: auto;
-  margin: 20px 0;
-}
-
-/* Для больших экранов можно обеспечить минимум по высоте */
-@media (min-width: 601px) {
-  #visitCard {
-    min-height: 1500px;
-  }
-}
-
-
-    /* Disable host-page smooth scroll (we animate manually) */
-    html { scroll-behavior: auto; }
-  </style>
+  <link rel="stylesheet" href="/assets/css/hugr.css?v=1.0">
 </head>
 <body>
 
@@ -68,32 +15,33 @@
   <object
     id="visitCard"
     type="image/svg+xml"
-    data="portfolio.svg?v=1.3"
+    data="portfolio.svg?v=1.4"
     aria-label="Interactive business card">
     Your browser does not support embedded SVG.
-    <img src="portfolio.svg?v=1.3" alt="Business card">
+    <img src="portfolio.svg?v=1.4" alt="Business card">
   </object>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const overlay = document.getElementById('svgOverlay');
-      const card    = document.getElementById('visitCard');
-      const params  = new URLSearchParams(window.location.search);
-      const filter  = params.get('filter');
-      const url     = new URL(card.getAttribute('data'), window.location.href);
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('svgOverlay');
+    const card    = document.getElementById('visitCard');
+    const params  = new URLSearchParams(window.location.search);
+    const filter  = params.get('filter');
+    const url     = new URL(card.getAttribute('data'), window.location.href);
 
-      if (filter) url.searchParams.set('filter', filter);
-      url.hash = 'carouselGroup';
-      card.setAttribute('data', url.href);
-      const img = card.querySelector('img');
-      if (img) img.src = url.href;
+    if (filter) url.searchParams.set('filter', filter);
+    url.hash = 'carouselGroup';
+    card.setAttribute('data', url.href);
+    const img = card.querySelector('img');
+    if (img) img.src = url.href;
 
-      card.addEventListener('load', () => {
-        overlay.style.display = 'none';
-        const svgDoc    = card.contentDocument;
-        const slider   = svgDoc.getElementById('carouselGroup');
-        if (!slider) return;
+    card.addEventListener('load', () => {
+      overlay.style.display = 'none';
 
+      const svgDoc = card.contentDocument;
+      const slider = svgDoc.getElementById('carouselGroup');
+      if (slider) {
+        // плавная прокрутка к слайдеру за 2 с
         const cardRect   = card.getBoundingClientRect();
         const sliderRect = slider.getBoundingClientRect();
         const startY     = window.pageYOffset;
@@ -103,20 +51,30 @@
 
         function animateScroll(now) {
           const t = (now - startTime) / duration;
-          if (t < 1) {
-            const eased = t < 0.5
-              ? 2*t*t
-              : -1 + (4 - 2*t)*t;
-            window.scrollTo(0, startY + (targetY - startY)*eased);
-            requestAnimationFrame(animateScroll);
-          } else {
-            window.scrollTo(0, targetY);
-          }
+          const eased = t < 0.5
+            ? 2*t*t
+            : -1 + (4 - 2*t)*t;
+          window.scrollTo(0, startY + (targetY - startY) * Math.min(eased, 1));
+          if (t < 1) requestAnimationFrame(animateScroll);
         }
         requestAnimationFrame(animateScroll);
-      });
+      }
+
+      // «Прилипание» бургер-меню внутри SVG
+      const burger = svgDoc.getElementById('burger');
+      if (burger) {
+        function updateBurger() {
+          const cardRect = card.getBoundingClientRect();
+          const offset   = cardRect.top < 0 ? -cardRect.top : 0;
+          burger.setAttribute('transform', `translate(20, ${20 + offset})`);
+        }
+        window.addEventListener('scroll', updateBurger);
+        window.addEventListener('resize', updateBurger);
+        updateBurger();
+      }
     });
-  </script>
+  });
+</script>
   <!--
     Note: We could alternatively relax the CSP (e.g. allow 'unsafe-inline' for script-src-elem)
     so that the SVG’s own embedded <script> would execute, but relaxing CSP like that

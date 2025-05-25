@@ -1,23 +1,50 @@
-.laptop {
-  width: 800px;        /* ширина исходного PNG */
-  height: 500px;       /* высота исходного PNG */
-  position: relative;
-  background: url('laptop.png') no-repeat center/contain;
+/* Reset and page background */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Disable host-page smooth scroll (we animate manually) */
+html { scroll-behavior: auto; }
+
+body {
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-.laptop .screen {
-  position: absolute;
-  top: 100px;          /* координаты экрана внутри PNG */
-  left: 120px;
-  width: 560px;        /* размеры области экрана */
-  height: 315px;
-  background-size: cover;
-  /* накладываем маску из прозрачного PNG: белая область — видна, остальное — скрыто */
-  mask-image: url('../assets/laptop.png');
-  mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  /* для браузеров на WebKit */
-  -webkit-mask-image: url('../assets/laptop.png');
-  -webkit-mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
+/* Overlay + spinner */
+#svgOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+#svgOverlay .spinner {
+  width: 50px; height: 50px;
+  border: 5px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* SVG container centering and sizing */
+#visitCard {
+  width: 100%;
+  max-width: 1024px;
+  aspect-ratio: 1024 / 1500;
+  height: auto;
+  margin: 20px 0;
+}
+
+@media (min-width: 601px) {
+  #visitCard {
+    min-height: 1500px;
+  }
 }
