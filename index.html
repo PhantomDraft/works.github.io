@@ -46,39 +46,35 @@
     <img src="portfolio.svg?v=1.3" alt="Business card">
   </object>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Read the 'filter' parameter from the page URL
-      const params = new URLSearchParams(window.location.search);
-      const filter = params.get('filter');
-      if (filter) {
-        const card = document.getElementById('visitCard');
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const card   = document.getElementById('visitCard');
+    const params = new URLSearchParams(window.location.search);
+    const filter = params.get('filter');
 
-        // 1) Update the URL on the <object> element and its nested <img>
-        const originalData = card.getAttribute('data');
-        const dataUrl = new URL(originalData, window.location.href);
-        dataUrl.searchParams.set('filter', filter);
-        card.setAttribute('data', dataUrl.href);
-        const fallbackImg = card.querySelector('img');
-        if (fallbackImg) fallbackImg.src = dataUrl.href;
+    if (filter) {
+      const dataUrl = new URL(card.getAttribute('data'), window.location.href);
+      dataUrl.searchParams.set('filter', filter);
+      dataUrl.hash = 'laptop';
+      card.setAttribute('data', dataUrl.href);
+      const fallbackImg = card.querySelector('img');
+      if (fallbackImg) fallbackImg.src = dataUrl.href;
 
-        // 2) Once the SVG has loaded, set the 'data-filter' attribute directly on the <svg>
-        card.addEventListener('load', () => {
-          const svgEl = card.contentDocument.documentElement;
-          svgEl.setAttribute('data-filter', filter);
-        });
-      }
-
-      // 3) Also scroll the host document down to the card after it loads
-      const card = document.getElementById('visitCard');
       card.addEventListener('load', () => {
-        // small delay to let everything settle
-        setTimeout(() => {
-          card.scrollIntoView({ behavior: 'smooth' });
-        }, 500);
+        const svgEl  = card.contentDocument.documentElement;
+        svgEl.setAttribute('data-filter', filter);
+        const laptop = card.contentDocument.getElementById('laptop');
+        if (laptop) laptop.scrollIntoView({ behavior: 'smooth' });
       });
+    }
+
+    card.addEventListener('load', () => {
+      setTimeout(() => {
+        card.scrollIntoView({ behavior: 'smooth' });
+      }, 500);
     });
-  </script>
+  });
+</script>
 
   <!--
     Note: We could alternatively relax the CSP (e.g. allow 'unsafe-inline' for script-src-elem)
