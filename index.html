@@ -39,20 +39,21 @@
     }
 
     /* SVG container centering and sizing */
-    #visitCard {
-      width: 1024px;
-      height: 1500px;
-      max-width: 100%;
-      margin: 20px 0;
-      flex-shrink: 0;
-    }
+#visitCard {
+  width: 100%;
+  max-width: 1024px;
+  aspect-ratio: 1024 / 1500;
+  height: auto;
+  margin: 20px 0;
+}
 
-    @media (max-width: 600px) {
-      #visitCard {
-        width: 100%;
-        height: 1500px;
-      }
-    }
+/* Для больших экранов можно обеспечить минимум по высоте */
+@media (min-width: 601px) {
+  #visitCard {
+    min-height: 1500px;
+  }
+}
+
 
     /* Disable host-page smooth scroll (we animate manually) */
     html { scroll-behavior: auto; }
