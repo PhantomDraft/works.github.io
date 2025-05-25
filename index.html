@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Projects Created by PD</title>
-  <link rel="stylesheet" href="/assets/css/hugr.css?v=1.0">
+  <link rel="stylesheet" href="./assets/css/hugr.css?v=1.0">
 </head>
 <body>
 
@@ -21,60 +21,58 @@
     <img src="portfolio.svg?v=1.4" alt="Business card">
   </object>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const overlay = document.getElementById('svgOverlay');
-    const card    = document.getElementById('visitCard');
-    const params  = new URLSearchParams(window.location.search);
-    const filter  = params.get('filter');
-    const url     = new URL(card.getAttribute('data'), window.location.href);
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('svgOverlay');
+      const card    = document.getElementById('visitCard');
+      const params  = new URLSearchParams(window.location.search);
+      const filter  = params.get('filter');
+      const url     = new URL(card.getAttribute('data'), window.location.href);
 
-    if (filter) url.searchParams.set('filter', filter);
-    url.hash = 'carouselGroup';
-    card.setAttribute('data', url.href);
-    const img = card.querySelector('img');
-    if (img) img.src = url.href;
+      if (filter) url.searchParams.set('filter', filter);
+      url.hash = 'carouselGroup';
+      card.setAttribute('data', url.href);
+      const img = card.querySelector('img');
+      if (img) img.src = url.href;
 
-    card.addEventListener('load', () => {
-      overlay.style.display = 'none';
+      card.addEventListener('load', () => {
+        overlay.style.display = 'none';
 
-      const svgDoc = card.contentDocument;
-      const slider = svgDoc.getElementById('carouselGroup');
-      if (slider) {
-        // плавная прокрутка к слайдеру за 2 с
-        const cardRect   = card.getBoundingClientRect();
-        const sliderRect = slider.getBoundingClientRect();
-        const startY     = window.pageYOffset;
-        const targetY    = cardRect.top + sliderRect.top;
-        const duration   = 2000;
-        const startTime  = performance.now();
+        const svgDoc = card.contentDocument;
+        const slider = svgDoc.getElementById('carouselGroup');
+        if (slider) {
+          const cardRect   = card.getBoundingClientRect();
+          const sliderRect = slider.getBoundingClientRect();
+          const startY     = window.pageYOffset;
+          const targetY    = cardRect.top + sliderRect.top;
+          const duration   = 2000;
+          const startTime  = performance.now();
 
-        function animateScroll(now) {
-          const t = (now - startTime) / duration;
-          const eased = t < 0.5
-            ? 2*t*t
-            : -1 + (4 - 2*t)*t;
-          window.scrollTo(0, startY + (targetY - startY) * Math.min(eased, 1));
-          if (t < 1) requestAnimationFrame(animateScroll);
+          function animateScroll(now) {
+            const t = (now - startTime) / duration;
+            const eased = t < 0.5
+              ? 2*t*t
+              : -1 + (4 - 2*t)*t;
+            window.scrollTo(0, startY + (targetY - startY) * Math.min(eased, 1));
+            if (t < 1) requestAnimationFrame(animateScroll);
+          }
+          requestAnimationFrame(animateScroll);
         }
-        requestAnimationFrame(animateScroll);
-      }
 
-      // «Прилипание» бургер-меню внутри SVG
-      const burger = svgDoc.getElementById('burger');
-      if (burger) {
-        function updateBurger() {
-          const cardRect = card.getBoundingClientRect();
-          const offset   = cardRect.top < 0 ? -cardRect.top : 0;
-          burger.setAttribute('transform', `translate(20, ${20 + offset})`);
+        const burger = svgDoc.getElementById('burger');
+        if (burger) {
+          function updateBurger() {
+            const cardRect = card.getBoundingClientRect();
+            const offset   = cardRect.top < 0 ? -cardRect.top : 0;
+            burger.setAttribute('transform', `translate(20, ${20 + offset})`);
+          }
+          window.addEventListener('scroll', updateBurger);
+          window.addEventListener('resize', updateBurger);
+          updateBurger();
         }
-        window.addEventListener('scroll', updateBurger);
-        window.addEventListener('resize', updateBurger);
-        updateBurger();
-      }
+      });
     });
-  });
-</script>
+  </script>
   <!--
     Note: We could alternatively relax the CSP (e.g. allow 'unsafe-inline' for script-src-elem)
     so that the SVG’s own embedded <script> would execute, but relaxing CSP like that
