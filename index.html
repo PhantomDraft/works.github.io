@@ -50,16 +50,22 @@
   document.addEventListener('DOMContentLoaded', () => {
     const card = document.getElementById('visitCard');
     card.addEventListener('load', () => {
-      const svgDoc = card.contentDocument;
-      const slider = svgDoc.getElementById('carouselGroup');
-      if (!slider) return;
-      const sliderRect = slider.getBoundingClientRect();
-      const cardRect   = card.getBoundingClientRect();
-      const targetY    = cardRect.top + sliderRect.top;
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      // ждём ~2 с (dur анимации луны) и прокручиваем
+      setTimeout(() => {
+        const svgDoc = card.contentDocument;
+        const slider = svgDoc.getElementById('carouselGroup');
+        if (!slider) return;
+        const sliderRect = slider.getBoundingClientRect();
+        const cardRect   = card.getBoundingClientRect();
+        window.scrollTo({
+          top: cardRect.top + sliderRect.top,
+          behavior: 'smooth'
+        });
+      }, 2000);
     });
   });
 </script>
+
 
 
   <!--
