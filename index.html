@@ -48,31 +48,19 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const card   = document.getElementById('visitCard');
-    const params = new URLSearchParams(window.location.search);
-    const filter = params.get('filter');
-    const dataUrl = new URL(card.getAttribute('data'), window.location.href);
-
-    if (filter) {
-      dataUrl.searchParams.set('filter', filter);
-    }
-    // добавляем хэш на нужный блок
-    dataUrl.hash = 'carouselGroup';
-
-    card.setAttribute('data', dataUrl.href);
-    const img = card.querySelector('img');
-    if (img) img.src = dataUrl.href;
-
+    const card = document.getElementById('visitCard');
     card.addEventListener('load', () => {
       const svgDoc = card.contentDocument;
-      // прокручиваем внутри SVG
       const slider = svgDoc.getElementById('carouselGroup');
-      if (slider) slider.scrollIntoView({ behavior: 'smooth' });
-      // а затем сам объект на странице
-      card.scrollIntoView({ behavior: 'smooth' });
+      if (!slider) return;
+      const sliderRect = slider.getBoundingClientRect();
+      const cardRect   = card.getBoundingClientRect();
+      const targetY    = cardRect.top + sliderRect.top;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
     });
   });
 </script>
+
 
   <!--
     Note: We could alternatively relax the CSP (e.g. allow 'unsafe-inline' for script-src-elem)
