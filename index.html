@@ -2,38 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Projects Created by PD</title>
 
-  <!--
-    Dynamically set <base> so that all relative URLs resolve correctly
-    whether we’re on the paid custom domain or on GitHub Pages.
-  -->
-  <script>
-    (function(){
-      const host = location.host.toLowerCase();
-      const customDomains = ['phantom-draft.com','www.phantom-draft.com'];
-      const prefix = customDomains.includes(host)
-                   ? '/works.github.io/'
-                   : '/';
-      const baseEl = document.createElement('base');
-      baseEl.href = prefix;
-      document.head.prepend(baseEl);
-    })();
-  </script>
-
-  <link rel="stylesheet" href="styles/hugr.css">
-
   <style>
-    /* Enable smooth scrolling for the host page */
-    html {
-      scroll-behavior: smooth;
+    /* 1. Оверлей и спиннер */
+    #svgOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
     }
+    #svgOverlay .spinner {
+      width: 50px; height: 50px;
+      border: 5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Включаем плавную прокрутку только для остальных элементов */
+    html { scroll-behavior: auto; }
   </style>
 </head>
-
 <body>
 
+  <!-- 1. Оверлей (показывается до загрузки SVG) -->
+  <div id="svgOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Ваш SVG-кард -->
   <object
     id="visitCard"
     type="image/svg+xml"
@@ -41,33 +46,60 @@
     width="1024"
     height="1500"
     aria-label="Interactive business card">
-    <!-- Fallback if <object> is not supported -->
     Your browser does not support embedded SVG.
     <img src="portfolio.svg?v=1.3" alt="Business card">
   </object>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const card = document.getElementById('visitCard');
-    card.addEventListener('load', () => {
-      // ждём ~2 с (dur анимации луны) и прокручиваем
-      setTimeout(() => {
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('svgOverlay');
+      const card    = document.getElementById('visitCard');
+      const params  = new URLSearchParams(window.location.search);
+      const filter  = params.get('filter');
+      const url     = new URL(card.getAttribute('data'), window.location.href);
+
+      if (filter) url.searchParams.set('filter', filter);
+      // всегда прокручиваем к слайдеру
+      url.hash = 'carouselGroup';
+
+      card.setAttribute('data', url.href);
+      const fallbackImg = card.querySelector('img');
+      if (fallbackImg) fallbackImg.src = url.href;
+
+      // Ждём полной загрузки SVG
+      card.addEventListener('load', () => {
+        // 2. Скрываем оверлей, когда SVG распарсен
+        overlay.style.display = 'none';
+
         const svgDoc = card.contentDocument;
         const slider = svgDoc.getElementById('carouselGroup');
         if (!slider) return;
-        const sliderRect = slider.getBoundingClientRect();
+
+        // 3. Одновременная прокрутка с 2-секундной анимацией луны
         const cardRect   = card.getBoundingClientRect();
-        window.scrollTo({
-          top: cardRect.top + sliderRect.top,
-          behavior: 'smooth'
-        });
-      }, 2000);
+        const sliderRect = slider.getBoundingClientRect();
+        const startY     = window.pageYOffset;
+        const targetY    = cardRect.top + sliderRect.top;
+        const duration   = 2000;
+        const startTime  = performance.now();
+
+        function animateScroll(now) {
+          const t = (now - startTime) / duration;
+          if (t < 1) {
+            // easeInOutQuad
+            const eased = t < 0.5
+              ? 2 * t * t
+              : -1 + (4 - 2 * t) * t;
+            window.scrollTo(0, startY + (targetY - startY) * eased);
+            requestAnimationFrame(animateScroll);
+          } else {
+            window.scrollTo(0, targetY);
+          }
+        }
+        requestAnimationFrame(animateScroll);
+      });
     });
-  });
-</script>
-
-
-
+  </script>
   <!--
     Note: We could alternatively relax the CSP (e.g. allow 'unsafe-inline' for script-src-elem)
     so that the SVG’s own embedded <script> would execute, but relaxing CSP like that
